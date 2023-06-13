@@ -1,0 +1,8 @@
+﻿  C:\Users\NUC\Documents\GitHub\FWMoverDLAPI\FWMoverDLAPI\lib\x64\dlapi.dll
+          1 file(s) copied.
+  C:\Users\NUC\Documents\GitHub\FWMoverDLAPI\FWMoverDLAPI\dependencies\x64\ftd2xx.dll
+  C:\Users\NUC\Documents\GitHub\FWMoverDLAPI\FWMoverDLAPI\dependencies\x64\FTD3XX.dll
+          2 file(s) copied.
+FWMoverDLAPI.obj : error LNK2019: unresolved external symbol __imp_getGateway referenced in function main
+FWMoverDLAPI.obj : error LNK2019: unresolved external symbol __imp_deleteGateway referenced in function main
+C:\Users\NUC\Documents\GitHub\FWMoverDLAPI\FWMoverDLAPI\x64\Debug\FWMoverDLAPI.exe : fatal error LNK1120: 2 unresolved externals
