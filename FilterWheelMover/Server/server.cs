@@ -153,7 +153,7 @@ class Server
         try
         {
             // Bind the socket to a local endpoint
-            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
+            IPAddress ipAddress = IPAddress.Parse("10.150.150.84");
             int port = 12345;
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
             socket.Bind(localEndPoint);
@@ -186,32 +186,53 @@ class Server
 
             Console.WriteLine("Client Connected!");
 
-            //Receive data from the client
-            byte[] buffer = new byte[4096];
-            int bytesRead = clientSocket.Receive(buffer);
-            string dataReceived = System.Text.Encoding.ASCII.GetString(buffer, 0, bytesRead);
-            Console.WriteLine("Data Received: " + dataReceived);
+            while(clientSocket.Connected)
+            {
+                //Receive data from the client
+                byte[] buffer = new byte[4096];
+                int bytesRead = clientSocket.Receive(buffer);
 
-            //Send off input and do things with it
-            string rtn = parseInput(dataReceived);
+                //If we get 0 bytes, connection has been closed
+                if (bytesRead == 0)
+                {// Close the client socket to exit gracefully
+                    Console.WriteLine("Client Disconnected: Waiting for New Client");
+                    break;
+                }
+                string dataReceived = System.Text.Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                Console.WriteLine("Data Received: " + dataReceived);
 
-            //Send Data back to the client
-            byte[] dataToSend = System.Text.Encoding.ASCII.GetBytes(rtn);
-            clientSocket.Send(dataToSend);
+                //If data received tells us to quit server, quit here and close
+                if (dataReceived == "quit server")
+                {
+                    //Close the client Socket
+                    clientSocket.Shutdown(SocketShutdown.Both);
+                    clientSocket.Close();
+                    // Close the server socket
+                    socket.Close();
+                    return 0;
+                }
+                //Send off input and do things with it
+                string rtn = parseInput(dataReceived);
 
+                //Send Data back to the client
+                byte[] dataToSend = System.Text.Encoding.ASCII.GetBytes(rtn);
+                clientSocket.Send(dataToSend);
+
+            }
             //Close the client Socket
             clientSocket.Shutdown(SocketShutdown.Both);
             clientSocket.Close();
         }
         catch (Exception ex)
         {
+
             Console.WriteLine("An error occurred: " + ex.Message);
             return 1;
         }
 
-        //Close the server Socket
-        socket.Close();
-        return 0;
+        // Start waiting again if client closed
+        int ret_val = receiveAndSend();
+        return ret_val;
     }
     
     static void Main(string[] args)
@@ -224,20 +245,20 @@ class Server
          */
         int ret_val = 0;
 
-        Server server= new Server();
-        //Initialize socket
-        ret_val = server.initSocket();
-        if (ret_val == 1)
-        {
-            //An error occurred during socket initialization
-            Environment.Exit(1);
-        }
-
+        Server server = new Server();
         //Initialize Filter Wheel
         ret_val = server.initFW();
         if (ret_val == 1)
         {
             //An error occurred during Filter Wheel initialization
+            Environment.Exit(1);
+        }
+
+        //Initialize socket
+        ret_val = server.initSocket();
+        if (ret_val == 1)
+        {
+            //An error occurred during socket initialization
             Environment.Exit(1);
         }
 
@@ -247,6 +268,11 @@ class Server
         {
             //An error occurred during the receive and send process
             Environment.Exit(1);
+        }
+        else if (ret_val == 2)
+        {
+            //Wait again for connection
+
         }
     }
 }
