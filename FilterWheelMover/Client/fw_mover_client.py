@@ -1,5 +1,5 @@
 """
-Usage: python client.py <command> [<number>] [<server_address>] [<server_port>]
+Usage: python fw_mover_client.py <command> [<number>] [<server_address>] [<server_port>]
 
 This script connects to the intel NUC which controls the filter wheel 
 and sends commands along with optional arguments.
@@ -22,7 +22,7 @@ Commands:
 
     - set <number>: Sets data on the server. Replace <number> with an actual number.
 
-    - server shutdown: Shuts down the server.  ONLY USE THIS IF YOU KNOW WHAT YOU'RE DOING.
+    - server_shutdown: Shuts down the server.  ONLY USE THIS IF YOU KNOW WHAT YOU'RE DOING.
 """
 
 import socket
@@ -31,6 +31,9 @@ import sys
 def send_message(server_address, server_port, message):
     # Create a socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # Set the timeout to 1 minute
+    sock.settimeout(60)
     try:
         # Connect to the server
         sock.connect((server_address, server_port))
@@ -64,8 +67,8 @@ def print_help():
     print("Available commands:")
     print("get - Gets the current filter wheel position.")
     print("set <number> - Sets the filter wheel position to the given number.  Replace <number> with an actual number.")
-    print("server shutdown - Shuts down the server.")
-    print("\nUsage: python client.py <command> [<number>] [<server_address>] [<server_port>]")
+    print("server_shutdown - Shuts down the server.")
+    print("\nUsage: python fw_mover_client.py <command> [<number>] [<server_address>] [<server_port>]")
 
 # Get the server address, port, and message from the command line arguments
 if len(sys.argv) < 2 or sys.argv[1] == "help":
@@ -75,10 +78,16 @@ if len(sys.argv) < 2 or sys.argv[1] == "help":
 MESSAGE = sys.argv[1]
 NUMBER = None
 
-# Ensure number is provided for "set" command
+# Set default values for server address and port
+SERVER_ADDRESS = 'localhost'
+SERVER_PORT = 8080
+
+# Deal with the set command first, then all others due to the extra parameter
 if MESSAGE == "set":
+
     if len(sys.argv) < 3:
-        print("Usage: python client.py set <number> [<server_address>] [<server_port>]")
+        print("Too few arguments provided.")
+        print("Usage: python fw_mover_client.py set <number> [<server_address>] [<server_port>]")
         sys.exit(1)
 
     try:
@@ -86,16 +95,46 @@ if MESSAGE == "set":
     except ValueError:
         print("Invalid number provided with 'set' command.")
         sys.exit(1)
+    
+    if len(sys.argv) == 3:
+        send_message(SERVER_ADDRESS, SERVER_PORT, f"{MESSAGE} {NUMBER}")
 
-# Set default values for server address and port
-SERVER_ADDRESS = 'localhost'
-SERVER_PORT = 8080
+    if len(sys.argv) == 4:
+        SERVER_ADDRESS = sys.argv[3]
+        send_message(SERVER_ADDRESS, SERVER_PORT, f"{MESSAGE} {NUMBER}")
 
-# Override default values if provided as command line arguments
-if len(sys.argv) > 3:
-    SERVER_ADDRESS = sys.argv[3]
-if len(sys.argv) > 4:
-    SERVER_PORT = int(sys.argv[4])
+    if len(sys.argv) == 5:
+        SERVER_ADDRESS = sys.argv[3]
+        SERVER_PORT = int(sys.argv[4])
+        send_message(SERVER_ADDRESS, SERVER_PORT, f"{MESSAGE} {NUMBER}")
 
-# Send the message to the server
-send_message(SERVER_ADDRESS, SERVER_PORT, MESSAGE)
+    if len(sys.argv) > 5:
+        print("Too many arguments provided.")
+        print("Usage: python fw_mover_client.py set <number> [<server_address>] [<server_port>]")
+        sys.exit(1)
+    
+# Deal with all other commands
+else:
+
+    if len(sys.argv) < 2:
+        print("Too few arguments provided.")
+        print("Usage: python fw_mover_client.py <command> [<server_address>] [<server_port>]")
+        sys.exit(1)
+
+    if len(sys.argv) == 2:
+        send_message(SERVER_ADDRESS, SERVER_PORT, MESSAGE)
+
+    if len(sys.argv) == 3:
+        SERVER_ADDRESS = sys.argv[2]
+        send_message(SERVER_ADDRESS, SERVER_PORT, MESSAGE)
+
+    if len(sys.argv) == 4:
+        SERVER_ADDRESS = sys.argv[2]
+        SERVER_PORT = int(sys.argv[3])
+        send_message(SERVER_ADDRESS, SERVER_PORT, MESSAGE)
+
+    if len(sys.argv) > 4:
+        print("Too many arguments provided.")
+        print("Usage: python fw_mover_client.py <command> [<server_address>] [<server_port>]")
+        sys.exit(1)
+
