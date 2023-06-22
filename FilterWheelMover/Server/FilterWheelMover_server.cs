@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-class Server
+class FilterWheelMover_server
 {
     //Global variables for this class
     IFilterWheelV2 m_FilterWheel;
@@ -91,7 +91,7 @@ class Server
          *   Returns:
          *   string rtn : String that will be printed on the client screen
          */
-         if (line == "get position")
+         if (line == "get")
          {
             // Get the position of the filter wheel.
             int pos = m_FilterWheel.Position;
@@ -151,16 +151,27 @@ class Server
          */
         socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         try
-        {
-            // Bind the socket to a local endpoint
-            IPAddress ipAddress = IPAddress.Parse("10.150.150.84");
-            int port = 12345;
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
-            socket.Bind(localEndPoint);
+        {   
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    // Bind the socket to a local endpoint
+                    int port = 12345;
+                    IPEndPoint localEndPoint = new IPEndPoint(ip, port);
+                    socket.Bind(localEndPoint);
 
-            // Start listening for incoming connections
-            socket.Listen(10);
-            Console.WriteLine("Waiting for a connection...");
+                    //Print the IP Address for any clients to use
+                    Console.WriteLine("IP Address: " + ip.ToString());
+                    Console.WriteLine("Port: " + port.ToString());
+                    // Start listening for incoming connections
+                    socket.Listen(10);
+                    Console.WriteLine("Waiting for a connection...");
+                    return 0;
+                }
+            }
+            Console.WriteLine("No network adapters with an IPv4 address in the system.  Exiting");
         }
         catch (Exception e)
         {
@@ -202,8 +213,15 @@ class Server
                 Console.WriteLine("Data Received: " + dataReceived);
 
                 //If data received tells us to quit server, quit here and close
-                if (dataReceived == "quit server")
+                if (dataReceived == "server_shutdown")
                 {
+                    //Tell the socket that the server is shutting down
+                    string toSend = "Shutting down server...";
+
+                    //Send Data back to the client
+                    byte[] d2s = System.Text.Encoding.ASCII.GetBytes(toSend);
+                    clientSocket.Send(d2s);
+
                     //Close the client Socket
                     clientSocket.Shutdown(SocketShutdown.Both);
                     clientSocket.Close();
@@ -245,7 +263,7 @@ class Server
          */
         int ret_val = 0;
 
-        Server server = new Server();
+        FilterWheelMover_server server = new FilterWheelMover_server();
         //Initialize Filter Wheel
         ret_val = server.initFW();
         if (ret_val == 1)
