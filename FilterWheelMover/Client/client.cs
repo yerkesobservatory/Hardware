@@ -17,7 +17,7 @@ class Client
 	     *  int: 0 if success, 1 if failure
 	     */
         //Define the server address.  TODO: Add a config file to specify port number and IP Address
-        string serverIP = "127.0.0.1";
+        string serverIP = "10.150.150.84";
         int serverPort = 12345;
 
         try
