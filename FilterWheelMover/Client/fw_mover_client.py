@@ -24,10 +24,20 @@ Commands:
 
     - server_shutdown: Shuts down the server.  ONLY USE THIS IF YOU KNOW WHAT YOU'RE DOING.
 """
-
+import logging
 import socket
 import sys
 
+# Configure logging 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler("fw_mover_client.log"),  # Log file handler
+        logging.StreamHandler()  # Console handler
+    ]
+)
+logger = logging.getLogger(__name__)
 def send_message(server_address, server_port, message):
     # Create a socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -40,24 +50,25 @@ def send_message(server_address, server_port, message):
 
         # Send the message to the server
         sock.sendall(message.encode('utf-8'))
+        logger.info(f"Sent command: {message}")  # Log the command
 
         # Set the timeout to 1 minute
         sock.settimeout(60)
 
         # Receive and print the server's response
         response = sock.recv(1024)
-        print(f"Server response: {response.decode('utf-8')}")
+        logger.info(f"Server response: {response.decode('utf-8')}")
 
         # Keep the program running until a response is received or timeout occurs
         while not response:
             try:
                 response = sock.recv(1024)
             except socket.timeout:
-                print("Timeout occurred. No response received.")
+                logger.warning("Timeout occurred. No response received.")
                 break
 
     except Exception as ex:
-        print(f"Error: {str(ex)}")
+        logger.error(f"Error: {str(ex)}")
 
     finally:
         # Close the socket
@@ -85,56 +96,65 @@ SERVER_PORT = 8080
 # Deal with the set command first, then all others due to the extra parameter
 if MESSAGE == "set":
 
-    if len(sys.argv) < 3:
-        print("Too few arguments provided.")
-        print("Usage: python fw_mover_client.py set <number> [<server_address>] [<server_port>]")
+    if len(sys.argv) < 3: 
+        # You need at least 3 arguments- fw_mover_client.py, set, and a number
+        logger.error("Too few arguments provided.")
+        logger.info("Usage: python fw_mover_client.py set <number> [<server_address>] [<server_port>]")
         sys.exit(1)
 
     try:
         NUMBER = int(sys.argv[2])
     except ValueError:
-        print("Invalid number provided with 'set' command.")
+        # You need the last argument to be a number in this case
+        logger.error("Invalid number provided with 'set' command.")
         sys.exit(1)
     
     if len(sys.argv) == 3:
+        # Use the default server address and server port values
         send_message(SERVER_ADDRESS, SERVER_PORT, f"{MESSAGE} {NUMBER}")
 
     if len(sys.argv) == 4:
+        # Use the default port values but change the address to what has been provided
         SERVER_ADDRESS = sys.argv[3]
         send_message(SERVER_ADDRESS, SERVER_PORT, f"{MESSAGE} {NUMBER}")
 
     if len(sys.argv) == 5:
+        # Use the custom port and address values
         SERVER_ADDRESS = sys.argv[3]
         SERVER_PORT = int(sys.argv[4])
         send_message(SERVER_ADDRESS, SERVER_PORT, f"{MESSAGE} {NUMBER}")
 
     if len(sys.argv) > 5:
-        print("Too many arguments provided.")
-        print("Usage: python fw_mover_client.py set <number> [<server_address>] [<server_port>]")
+        logger.error("Too many arguments provided.")
+        logger.info("Usage: python fw_mover_client.py set <number> [<server_address>] [<server_port>]")
         sys.exit(1)
     
 # Deal with all other commands
 else:
 
     if len(sys.argv) < 2:
-        print("Too few arguments provided.")
-        print("Usage: python fw_mover_client.py <command> [<server_address>] [<server_port>]")
+        # You only need 2 arguments if the argument is not 'set"
+        logger.error("Too few arguments provided.")
+        logger.info("Usage: python fw_mover_client.py <command> [<server_address>] [<server_port>]")
         sys.exit(1)
 
     if len(sys.argv) == 2:
+        # Use the default server address and port
         send_message(SERVER_ADDRESS, SERVER_PORT, MESSAGE)
 
     if len(sys.argv) == 3:
+        # Use the default port but change the address
         SERVER_ADDRESS = sys.argv[2]
         send_message(SERVER_ADDRESS, SERVER_PORT, MESSAGE)
 
     if len(sys.argv) == 4:
+        # Change both the port and the address
         SERVER_ADDRESS = sys.argv[2]
         SERVER_PORT = int(sys.argv[3])
         send_message(SERVER_ADDRESS, SERVER_PORT, MESSAGE)
 
     if len(sys.argv) > 4:
-        print("Too many arguments provided.")
-        print("Usage: python fw_mover_client.py <command> [<server_address>] [<server_port>]")
+        logger.error("Too many arguments provided.")
+        logger.info("Usage: python fw_mover_client.py <command> [<server_address>] [<server_port>]")
         sys.exit(1)
 
