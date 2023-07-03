@@ -188,4 +188,3 @@ else:
         logger.error("Too many arguments provided.")
         logger.info("Usage: python fw_mover_client.py <command> [<server_address>] [<server_port>]")
         sys.exit(1)
-
