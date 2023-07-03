@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-// Console.WriteLine("Hello, World!");
-
+﻿
 using ASCOM.Common.DeviceInterfaces;
 using System;
 using System.Net;
@@ -10,8 +8,36 @@ using System.Text;
 class FilterWheelMover_server
 {
     //Global variables for this class
+    private static StreamWriter logFile;
     IFilterWheelV2 m_FilterWheel;
     Socket socket;
+
+    private void Log(string message)
+    {
+        /* A simple logging function that takes a message and adds it to the log file (and prints to console too).
+         * Effectively just an alias for logFile.WriteLine() and Console.WriteLine()
+         * Args:
+         * string message:  message to be added to the log file
+         * Returns:
+         * None
+         */
+        Console.WriteLine(message);
+        logFile.WriteLine(message);
+    }
+
+    private void LogError(string message)
+    {
+        /* A method that causes errors to be highlighted better in the log file. 
+         * Args:
+         * string message:  message to be added to the log file
+         * Returns:
+         * None
+         */
+        string errorPrefix = "[ERROR] ";
+        Console.WriteLine(message);
+        logFile.WriteLine(errorPrefix + message);
+        logFile.Flush();
+    }
 
     int initFW()
     {
@@ -22,7 +48,7 @@ class FilterWheelMover_server
          *  int: 0 for success, 1 for failure
          */
 
-         var prog_id = "ASCOM.SBIG.USB_FW.FilterWheel";
+        var prog_id = "ASCOM.SBIG.USB_FW.FilterWheel";
 
          try
          {
@@ -33,7 +59,7 @@ class FilterWheelMover_server
          }
          catch (InvalidOperationException e)
          {
-            Console.WriteLine("Accessing remotely, defaulting to SBIG.USB_FW");
+            Log("Accessing remotely, defaulting to SBIG.USB_FW");
             return 1;
          }
 
@@ -59,7 +85,7 @@ class FilterWheelMover_server
         DateTime StartTime;
         m_FilterWheel.Position = pos;
         StartTime = DateTime.Now;
-        Console.Write("Setting filter wheel to position " + pos.ToString() + "...");
+        Log("Setting filter wheel to position " + pos.ToString() + "...");
 
         do
         {
@@ -74,8 +100,8 @@ class FilterWheelMover_server
             //Error setting filter wheel
             return 1;
         }
-        Console.Write("\n");
-        Console.WriteLine("Set position to: " + pos.ToString());
+        Log("\n");
+        Log("Set position to: " + pos.ToString());
         return 0;
     }
 
@@ -96,6 +122,7 @@ class FilterWheelMover_server
             // Get the position of the filter wheel.
             int pos = m_FilterWheel.Position;
             string rtn = "Filter Wheel Position is " + pos.ToString();
+            Log(rtn);
             return rtn;
          }
          else
@@ -107,6 +134,7 @@ class FilterWheelMover_server
              if (words[0] != "set")
              {
                 string rtn = "Invalid input";
+                LogError(rtn);
                 return rtn;
              }
              else
@@ -119,21 +147,25 @@ class FilterWheelMover_server
                 {
                     //Not given a number
                     rtn = "Input was not a number";
+                    LogError(rtn);
                     return rtn;
                 }
                 if (pos > 9 || pos < 0)
                 {
                     //Given an invalid number
                     rtn = "Enter a valid filter position (0-9)";
+                    LogError(rtn);
                     return rtn;
                 }
                 int ret_val = setFilterWheel(pos);
                 if (ret_val == 1)
                 {
                     string err = "Error setting filter wheel to position " + pos.ToString();
+                    LogError(err);
                     return err;
                 }
                 rtn = "Filter wheel set to position " + pos.ToString();
+                Log(rtn);
                 return rtn;
              }
          }
@@ -163,19 +195,19 @@ class FilterWheelMover_server
                     socket.Bind(localEndPoint);
 
                     //Print the IP Address for any clients to use
-                    Console.WriteLine("IP Address: " + ip.ToString());
-                    Console.WriteLine("Port: " + port.ToString());
+                    Log("IP Address: " + ip.ToString());
+                    Log("Port: " + port.ToString());
                     // Start listening for incoming connections
                     socket.Listen(10);
-                    Console.WriteLine("Waiting for a connection...");
+                    Log("Waiting for a connection...");
                     return 0;
                 }
             }
-            Console.WriteLine("No network adapters with an IPv4 address in the system.  Exiting");
+            LogError("No network adapters with an IPv4 address in the system.  Exiting");
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error initializing socket.  Exiting");
+            LogError("Error initializing socket.  Exiting");
             return 1;
         }
         return 0;
@@ -195,7 +227,7 @@ class FilterWheelMover_server
             //Accept an incoming connection
             Socket clientSocket = socket.Accept();
 
-            Console.WriteLine("Client Connected!");
+            Log("Client Connected!");
 
             while(clientSocket.Connected)
             {
@@ -206,18 +238,18 @@ class FilterWheelMover_server
                 //If we get 0 bytes, connection has been closed
                 if (bytesRead == 0)
                 {// Close the client socket to exit gracefully
-                    Console.WriteLine("Client Disconnected: Waiting for New Client");
+                    Log("Client Disconnected: Waiting for New Client");
                     break;
                 }
                 string dataReceived = System.Text.Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                Console.WriteLine("Data Received: " + dataReceived);
+                Log("Data Received: " + dataReceived);
 
                 //If data received tells us to quit server, quit here and close
                 if (dataReceived == "server_shutdown")
                 {
                     //Tell the socket that the server is shutting down
                     string toSend = "Shutting down server...";
-
+                    Log(toSend);
                     //Send Data back to the client
                     byte[] d2s = System.Text.Encoding.ASCII.GetBytes(toSend);
                     clientSocket.Send(d2s);
@@ -227,6 +259,7 @@ class FilterWheelMover_server
                     clientSocket.Close();
                     // Close the server socket
                     socket.Close();
+                    Log("Server has been shut succesfully");
                     return 0;
                 }
                 //Send off input and do things with it
@@ -244,7 +277,7 @@ class FilterWheelMover_server
         catch (Exception ex)
         {
 
-            Console.WriteLine("An error occurred: " + ex.Message);
+            LogError("An error occurred: " + ex.Message);
             return 1;
         }
 
@@ -252,7 +285,7 @@ class FilterWheelMover_server
         int ret_val = receiveAndSend();
         return ret_val;
     }
-    
+
     static void Main(string[] args)
     {
         /* Main method to start execution.  Initializes socket and filter wheel, then receives and sends input, then closes and cleans up.
@@ -261,36 +294,41 @@ class FilterWheelMover_server
          *  Returns:
          *  0 for success, 1 for failure.
          */
-        int ret_val = 0;
 
-        FilterWheelMover_server server = new FilterWheelMover_server();
-        //Initialize Filter Wheel
-        ret_val = server.initFW();
-        if (ret_val == 1)
-        {
-            //An error occurred during Filter Wheel initialization
-            Environment.Exit(1);
-        }
+        //Initialize the log file
+        string logFileName = "server_log.txt";
+        using (logFile = new StreamWriter(logFileName, append: false))
+        {            
+            FilterWheelMover_server server = new FilterWheelMover_server();
+            //Initialize Filter Wheel
+            int ret_val = 0;
+            ret_val = server.initFW();
+            if (ret_val == 1)
+            {
+                //An error occurred during Filter Wheel initialization
+                Environment.Exit(1);
+            }
 
-        //Initialize socket
-        ret_val = server.initSocket();
-        if (ret_val == 1)
-        {
-            //An error occurred during socket initialization
-            Environment.Exit(1);
-        }
+            //Initialize socket
+            ret_val = server.initSocket();
+            if (ret_val == 1)
+            {
+                //An error occurred during socket initialization
+                Environment.Exit(1);
+            }
 
-        //Receive and Send from/to  client
-        ret_val = server.receiveAndSend();
-        if (ret_val == 1)
-        {
-            //An error occurred during the receive and send process
-            Environment.Exit(1);
-        }
-        else if (ret_val == 2)
-        {
-            //Wait again for connection
+            //Receive and Send from/to  client
+            ret_val = server.receiveAndSend();
+            if (ret_val == 1)
+            {
+                //An error occurred during the receive and send process
+                Environment.Exit(1);
+            }
+            else if (ret_val == 2)
+            {
+                //Wait again for connection
 
+            }
         }
     }
 }
