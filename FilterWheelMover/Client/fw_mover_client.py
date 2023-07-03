@@ -27,6 +27,7 @@ Commands:
 import logging
 import socket
 import sys
+from configparser import ConfigParser
 
 # Configure logging 
 logging.basicConfig(
@@ -38,7 +39,42 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
+# Read server configuration from .ini file
+config = ConfigParser()
+config_file = "fw_mover_config.ini"
+found_config = config.read(config_file) # a boolean, false if there is no config file
+
+SERVER_ADDRESS = config.get("Server", "address", fallback="localhost")
+SERVER_PORT = config.getint("Server", "port", fallback=8080)
+TIMEOUT = config.getint("Timeout", "value", fallback=60)
+
+# Generate a new config with the fallback values if there is no config file
+if not found_config:
+    logger.warning("Configuration file not found. Creating a new one with fallback values.")
+
+    # Set fallback values
+    config["Server"] = {"address": "localhost", "port": "8080"}
+    config["Timeout"] = {"value": "60"}
+
+    # Write the config to a file
+    with open(config_file, "w") as file:
+        config.write(file)
+
+    logger.info(f"Created a new configuration file: {config_file}")
+
 def send_message(server_address, server_port, message):
+    """
+    This method is responsible for taking a message and delivering it to the server.
+    It opens a socket with the given server and port, streams the message, waits for a response,
+    then closes the connection.  Uses TCP.
+    Arguments:
+    server_address:  IP address of the server
+    server_port: Port of the server
+    message:  Command to be sent in the form of a string
+    Returns:
+    None
+    """
     # Create a socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -81,19 +117,15 @@ def print_help():
     print("server_shutdown - Shuts down the server.")
     print("\nUsage: python fw_mover_client.py <command> [<number>] [<server_address>] [<server_port>]")
 
-# Get the server address, port, and message from the command line arguments
-if len(sys.argv) < 2 or sys.argv[1] == "help":
-    print_help()
-    sys.exit(0)
-
 MESSAGE = sys.argv[1]
 NUMBER = None
 
-# Set default values for server address and port
-SERVER_ADDRESS = 'localhost'
-SERVER_PORT = 8080
+# First just deal with the help command
+if sys.argv[1] == "help":
+    print_help()
+    sys.exit(0) 
 
-# Deal with the set command first, then all others due to the extra parameter
+# Then deal with the set command first, then all others due to the extra parameter
 if MESSAGE == "set":
 
     if len(sys.argv) < 3: 
@@ -131,7 +163,6 @@ if MESSAGE == "set":
     
 # Deal with all other commands
 else:
-
     if len(sys.argv) < 2:
         # You only need 2 arguments if the argument is not 'set"
         logger.error("Too few arguments provided.")
