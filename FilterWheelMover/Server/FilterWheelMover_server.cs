@@ -4,13 +4,15 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-
+using IniParser;
+using IniParser.Model;
 class FilterWheelMover_server
 {
     //Global variables for this class
     private static StreamWriter logFile;
     IFilterWheelV2 m_FilterWheel;
     Socket socket;
+    IniData configuration;
 
     private void Log(string message)
     {
@@ -23,6 +25,7 @@ class FilterWheelMover_server
          */
         Console.WriteLine(message);
         logFile.WriteLine(message);
+        logFile.Flush();
     }
 
     private void LogError(string message)
@@ -37,6 +40,37 @@ class FilterWheelMover_server
         Console.WriteLine(message);
         logFile.WriteLine(errorPrefix + message);
         logFile.Flush();
+    }
+
+    public static IniData LoadConfiguration()
+    {
+        /* This method loads the config file with address, port, and timeout values.
+         * If there is none present, it creates one with some dummy vlues.
+         * Args:
+         * None
+         * Returns:
+         * IniData fileParser:  A parser that lets you read in values in other methods
+         */
+        string configFilePath = "config.ini";
+        if (!File.Exists(configFilePath))
+        {
+            // Create a new config file with default values
+            IniData defaultConfig = new IniData();
+            defaultConfig["Server"]["Address"] = "127.0.0.1";
+            defaultConfig["Server"]["Port"] = "8080";
+            defaultConfig["Server"]["checkAdapters"] = "True";
+            defaultConfig["Timeout"]["Value"] = "60";
+
+            // Save the default config to the file
+            var parser = new FileIniDataParser();
+            parser.WriteFile(configFilePath, defaultConfig);
+
+            Console.WriteLine($"Config file created: {configFilePath}");
+        }
+
+        // Load the configuration
+        var fileParser = new FileIniDataParser();
+        return fileParser.ReadFile(configFilePath);
     }
 
     int initFW()
@@ -80,8 +114,8 @@ class FilterWheelMover_server
          *  Returns:
          *  int: 0 for success, no other exceptions currently handled
          */
-
-        const int FILTER_WHEEL_TIME_OUT = 10; //Fix a time out value in case of any errors
+        
+        int FILTER_WHEEL_TIME_OUT = int.Parse(configuration["Timeout"]["Value"]); //Pull timeout from config file
         DateTime StartTime;
         m_FilterWheel.Position = pos;
         StartTime = DateTime.Now;
@@ -181,36 +215,81 @@ class FilterWheelMover_server
          * Returns:
          * int: 0 for success, 1 for failure
          */
-        socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        try
-        {   
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    // Bind the socket to a local endpoint
-                    int port = 12345;
-                    IPEndPoint localEndPoint = new IPEndPoint(ip, port);
-                    socket.Bind(localEndPoint);
 
-                    //Print the IP Address for any clients to use
-                    Log("IP Address: " + ip.ToString());
-                    Log("Port: " + port.ToString());
-                    // Start listening for incoming connections
-                    socket.Listen(10);
-                    Log("Waiting for a connection...");
-                    return 0;
-                }
-            }
-            LogError("No network adapters with an IPv4 address in the system.  Exiting");
+        // Use the config to get the port and the address in case we do not find an adapter
+        string SERVER_ADDRESS = configuration["Server"]["Address"];
+        int SERVER_PORT = int.Parse(configuration["Server"]["Port"]);
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        IPEndPoint endPoint;
+        /* Check the config file for if we want to check all the network adapters before
+         * going to the address specified in the config file or not
+         */
+        bool CHECK_ADAPTERS;
+        bool result = bool.TryParse(configuration["Server"]["checkAdapters"], out CHECK_ADAPTERS);
+        if (result == false)
+        {
+            Log("There was an error in your config file.  Please fix this error or delete the file for autofix.");
+            return 1;
         }
+        try
+        {
+            if(CHECK_ADAPTERS == true)
+            {   // Check all the adapters first then go to fall back
+                var host = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        // Bind the socket to an endpoint
+                        endPoint = new IPEndPoint(ip, SERVER_PORT);
+                        socket.Bind(endPoint);
+
+                        //Print the IP Address for any clients to use
+                        Log("IP Address: " + ip.ToString());
+                        Log("Port: " + SERVER_PORT.ToString());
+                        // Start listening for incoming connections
+                        socket.Listen(10);
+                        Log("Waiting for a connection...");
+                        return 0;
+                    }
+                }
+
+                // Use the default values to open a socket
+                Log("No network adapters with an IPv4 address in the system.  Using default values provided in config file");
+
+                IPAddress ipAddress = IPAddress.Parse(SERVER_ADDRESS);
+                endPoint = new IPEndPoint(ipAddress, SERVER_PORT);
+                socket.Bind(endPoint);
+
+                //Print the IP Address for any clients to use
+                Log("IP Address: " + SERVER_ADDRESS.ToString());
+                Log("Port: " + SERVER_PORT.ToString());
+                // Start listening for incoming connections
+                socket.Listen(10);
+                Log("Waiting for a connection...");
+                return 0;
+            }
+            else
+            {
+                // Use the default values to open a socket
+                IPAddress ipAddress = IPAddress.Parse(SERVER_ADDRESS);
+                endPoint = new IPEndPoint(ipAddress, SERVER_PORT);
+                socket.Bind(endPoint);
+
+                //Print the IP Address for any clients to use
+                Log("IP Address: " + SERVER_ADDRESS.ToString());
+                Log("Port: " + SERVER_PORT.ToString());
+                // Start listening for incoming connections
+                socket.Listen(10);
+                Log("Waiting for a connection...");
+                return 0;
+            }
+        }    
         catch (Exception e)
         {
             LogError("Error initializing socket.  Exiting");
             return 1;
         }
-        return 0;
     }
 
     int receiveAndSend()
@@ -300,7 +379,10 @@ class FilterWheelMover_server
         using (logFile = new StreamWriter(logFileName, append: false))
         {            
             FilterWheelMover_server server = new FilterWheelMover_server();
-            //Initialize Filter Wheel
+            //Load in the config file
+            server.configuration = LoadConfiguration();
+
+            //Initialize the Filter Wheel
             int ret_val = 0;
             ret_val = server.initFW();
             if (ret_val == 1)

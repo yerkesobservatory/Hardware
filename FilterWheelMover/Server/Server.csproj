@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="ASCOM.Com.Components" Version="1.0.107" />
     <PackageReference Include="ASCOM.Common.Components" Version="1.0.107" />
+    <PackageReference Include="ini-parser" Version="2.5.2" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="7.0.3" />
   </ItemGroup>
 
