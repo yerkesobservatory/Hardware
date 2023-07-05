@@ -58,7 +58,7 @@ class FilterWheelMover_server
             IniData defaultConfig = new IniData();
             defaultConfig["Server"]["Address"] = "127.0.0.1";
             defaultConfig["Server"]["Port"] = "8080";
-            defaultConfig["Server"]["checkAdapters"] = "True";
+            defaultConfig["Server"]["Check Adapters"] = "True";
             defaultConfig["Timeout"]["Value"] = "60";
 
             // Save the default config to the file
@@ -86,10 +86,8 @@ class FilterWheelMover_server
 
          try
          {
-            // Use in-built ASCOM functionality to connect to the camera
-            var chooser = new ASCOM.Com.Chooser();
-            chooser.DeviceType = ASCOM.Common.DeviceTypes.FilterWheel;
-            prog_id = chooser.Choose("ASCOM.SBIG.USB_FW.FilterWheel");
+            // Use in-built ASCOM functionality to connect to the filter wheel
+            prog_id = "ASCOM.SBIG.USB_FW.FilterWheel";
          }
          catch (InvalidOperationException e)
          {
@@ -151,13 +149,62 @@ class FilterWheelMover_server
          *   Returns:
          *   string rtn : String that will be printed on the client screen
          */
-         if (line == "get")
-         {
-            // Get the position of the filter wheel.
-            int pos = m_FilterWheel.Position;
-            string rtn = "Filter Wheel Position is " + pos.ToString();
+
+        string[] FILTER_LIST = null;
+        // Pull the number of filters from the ASCOM interface
+        int FILTER_NUMBER = m_FilterWheel.Names.Length;
+        try
+        {
+            /* Get the filter list from the config file.  
+             * If it does not exist, log that as a warning.
+             */
+            FILTER_LIST = configuration["Info"]["List"].Split(',');
+        }
+        catch (Exception e)
+        {
+            //Get the ASCOM List instead
+            Log("WARNING: No Filter List Provided");
+            FILTER_LIST = m_FilterWheel.Names;
+        }
+        if (line == "filter_list")
+        {
+            /* Print the filter list with the numbers 0 to FILTER_NUMBER/ List Length 
+             * (whichever is smaller) with prefixing.
+             * Each Filter is on a new line 
+             */
+            string rtn;
+            int len = Math.Min(FILTER_NUMBER, FILTER_LIST.Length);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("\n");
+            for (int i = 0; i < len; i++)
+            {
+                sb.AppendLine($"{i}: {FILTER_LIST[i]}");
+            }
+            rtn = sb.ToString();
             Log(rtn);
             return rtn;
+        }
+        if (line == "get")
+        {
+            // Get the position of the filter wheel.
+            int pos = m_FilterWheel.Position;
+            string rtn;
+            try
+            {
+                /* Try to print the filter name out.  If index out of bounds, warn and just give pos.
+                 * This is only a problem if the list in config is too short
+                 */
+                rtn = "Filter Wheel Position is " + pos.ToString() + ". This is the " + FILTER_LIST[pos] + " filter.";
+                Log(rtn);
+                return rtn;
+            }
+            catch (Exception e)
+            {
+                Log("WARNING: No corresponding list value was found.  This normally means your list in config is too short.");
+                rtn = "Filter Wheel Position is " + pos.ToString();
+                Log(rtn);
+                return rtn;
+            }
          }
          else
          {
@@ -184,10 +231,10 @@ class FilterWheelMover_server
                     LogError(rtn);
                     return rtn;
                 }
-                if (pos > 9 || pos < 0)
+                if (pos > FILTER_NUMBER - 1 || pos < 0)
                 {
                     //Given an invalid number
-                    rtn = "Enter a valid filter position (0-9)";
+                    rtn = "Enter a valid filter position (0-"+(FILTER_NUMBER-1)+")";
                     LogError(rtn);
                     return rtn;
                 }
@@ -198,13 +245,24 @@ class FilterWheelMover_server
                     LogError(err);
                     return err;
                 }
-                rtn = "Filter wheel set to position " + pos.ToString();
-                Log(rtn);
-                return rtn;
-             }
+                try
+                {
+                   /* Try to print the filter name out.  If index out of bounds, warn and just give pos.
+                    * This is only a problem if the list in config is too short
+                    */
+                    rtn = "Filter Wheel set to position " + pos.ToString() + ". This is the " + FILTER_LIST[pos] + " filter.";
+                    Log(rtn);
+                    return rtn;
+                }
+                catch (Exception e)
+                {
+                    Log("WARNING: No corresponding list value was found.  This normally means your list is too short.");
+                    rtn = "Filter Wheel set to position " + pos.ToString();
+                    return rtn;
+                }
+            }
          }
     }
-
     int initSocket()
     {
         /*
@@ -225,7 +283,7 @@ class FilterWheelMover_server
          * going to the address specified in the config file or not
          */
         bool CHECK_ADAPTERS;
-        bool result = bool.TryParse(configuration["Server"]["checkAdapters"], out CHECK_ADAPTERS);
+        bool result = bool.TryParse(configuration["Server"]["Check Adapters"], out CHECK_ADAPTERS);
         if (result == false)
         {
             Log("There was an error in your config file.  Please fix this error or delete the file for autofix.");
