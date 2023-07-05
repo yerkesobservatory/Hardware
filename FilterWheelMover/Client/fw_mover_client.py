@@ -1,5 +1,5 @@
 """
-Usage: python fw_mover_client.py <command> [<number>] [<server_address>] [<server_port>]
+Usage: python/ python3 fw_mover_client.py <command> [<number>] [<server_address>] [<server_port>]
 
 This script connects to the intel NUC which controls the filter wheel 
 and sends commands along with optional arguments.
@@ -22,6 +22,8 @@ Commands:
 
     - set <number>: Sets data on the server. Replace <number> with an actual number.
 
+    - filter_list: Prints the filter wheel positions and their corresponding filter names.
+
     - server_shutdown: Shuts down the server.  ONLY USE THIS IF YOU KNOW WHAT YOU'RE DOING.
 """
 import logging
@@ -42,26 +44,16 @@ logger = logging.getLogger(__name__)
 
 # Read server configuration from .ini file
 config = ConfigParser()
-config_file = "fw_mover_config.ini"
+config_file = "fw_mover_client_config.ini"
 found_config = config.read(config_file) # a boolean, false if there is no config file
 
-SERVER_ADDRESS = config.get("Server", "address", fallback="localhost")
-SERVER_PORT = config.getint("Server", "port", fallback=8080)
-TIMEOUT = config.getint("Timeout", "value", fallback=60)
+SERVER_ADDRESS = config.get("Server", "Address", fallback="localhost")
+SERVER_PORT = config.getint("Server", "Port", fallback=8080)
+TIMEOUT = config.getint("Other", "Timeout", fallback=60)
 
 # Generate a new config with the fallback values if there is no config file
 if not found_config:
-    logger.warning("Configuration file not found. Creating a new one with fallback values.")
-
-    # Set fallback values
-    config["Server"] = {"address": "localhost", "port": "8080"}
-    config["Timeout"] = {"value": "60"}
-
-    # Write the config to a file
-    with open(config_file, "w") as file:
-        config.write(file)
-
-    logger.info(f"Created a new configuration file: {config_file}")
+    logger.warning("Configuration file not found. Using the default values provided.")
 
 def send_message(server_address, server_port, message):
     """
@@ -115,7 +107,9 @@ def print_help():
     print("get - Gets the current filter wheel position.")
     print("set <number> - Sets the filter wheel position to the given number.  Replace <number> with an actual number.")
     print("server_shutdown - Shuts down the server.")
-    print("\nUsage: python fw_mover_client.py <command> [<number>] [<server_address>] [<server_port>]")
+    print("filter_list - Prints the filter wheel positions and their corresponding filter names.")
+    print("help - Prints this help message.")
+    print("\nUsage: python/ python3 fw_mover_client.py <command> [<number>] [<server_address>] [<server_port>]")
 
 MESSAGE = sys.argv[1]
 NUMBER = None
@@ -123,7 +117,7 @@ NUMBER = None
 # First just deal with the help command
 if sys.argv[1] == "help":
     print_help()
-    sys.exit(0) 
+    sys.exit(0)
 
 # Then deal with the set command first, then all others due to the extra parameter
 if MESSAGE == "set":
