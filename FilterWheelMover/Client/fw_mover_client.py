@@ -102,24 +102,10 @@ def send_message(server_address, server_port, message):
         # Close the socket
         sock.close()
 
-def print_help():
-    print("Available commands:")
-    print("get - Gets the current filter wheel position.")
-    print("set <number> - Sets the filter wheel position to the given number.  Replace <number> with an actual number.")
-    print("server_shutdown - Shuts down the server.")
-    print("filter_list - Prints the filter wheel positions and their corresponding filter names.")
-    print("help - Prints this help message.")
-    print("\nUsage: python/ python3 fw_mover_client.py <command> [<number>] [<server_address>] [<server_port>]")
-
 MESSAGE = sys.argv[1]
 NUMBER = None
 
-# First just deal with the help command
-if sys.argv[1] == "help":
-    print_help()
-    sys.exit(0)
-
-# Then deal with the set command first, then all others due to the extra parameter
+# Deal with the set command first, then all others due to the extra parameter
 if MESSAGE == "set":
 
     if len(sys.argv) < 3: 
