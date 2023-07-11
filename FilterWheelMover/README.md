@@ -8,14 +8,7 @@ This repo contains the code required to remotely move the SBIG AFW-10 filter whe
 Installation on the server side requires a machine running Windows.  The server also requires the .NET framework to be installed (recommended is 4.8.0).  You must also have the SBIG USB to Filter Wheel driver installed on your server, along with the additional ASCOM software that is required for the driver to run properly.  Beyond that, the server ships with all necessary .dll files to work out of the box.
 
 ### Client Side
-The client side simply requires python to run.  No additional packages are needed.  We recommend a fresh environment in anaconda, which can be created by running the following command in the anaconda prompt:
-```
-conda create -n <env_name> 
-```
-Followed by:
-```
-conda activate <env_name>
-```
+The client side simply requires python to run.  No additional packages are needed.  
 ## Server Side
 The server side finds the InterNetwork adapter (the adapter which allows communication over a network) and opens a socket on the port specified in the config file (default port is 8080).  If no network adapter is found, it will use the address 127.0.0.1, which is just the default loopback address.  No external computer will be able to communicate with the NUC in this case.  The server will then wait for a connection from a client.  Once a connection is established, the server will wait for a command from the client.  The server will then execute the command, and send a response back to the client, after which, the client is disconnected.  The server will then wait for another connection.  The server will continue to do this until it is closed, either on the NUC directly, or via the client sending the command "server_shutdown" to the server.  The first time the program is run on a new network, Windows Firewall may ask for permission to allow the program to communicate over the network, but after that the program can be set to auto-start on boot.  This means that only for initial set-up a mouse and monitor are required. 
 
@@ -30,6 +23,7 @@ The server has an associated config file called config.ini.  This file has param
 #### Other
 - Timeout: The amount of time the server will wait for a response from the filter wheel before timing out.  Default value is 60 seconds.
 Beware that the filter wheel takes some time to set the correct position, so you should not make this value too low.
+- LogFile: The location at which the log file will be generated.  Please use \ when specifying paths.  Eg: LogFile\Path\Here\log.txt
 - List (optional):  A comma separated list of the names of your filters.  The default config does not have this, but you can add it by adding a line below "Timeout".  If you have 10 filters named a to j, you would add a line that looks like this:
 List = a,b,c,d,e,f,g,h,i,j
 If you do not provide a list, the server will use the names provided to ASCOM when the wheel was being set up.  If you do provide a list, the server will use the names in the list, and will ignore the names provided to ASCOM.  The names in the list must be comma separated, and must be in the same order as the filters are in the wheel.
