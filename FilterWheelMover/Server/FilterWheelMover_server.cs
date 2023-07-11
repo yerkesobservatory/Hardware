@@ -60,7 +60,7 @@ class FilterWheelMover_server
             defaultConfig["Server"]["Port"] = "8080";
             defaultConfig["Server"]["Check Adapters"] = "True";
             defaultConfig["Other"]["Timeout"] = "60";
-            defaultConfig["Other"]["LogFile"] = "LogFile/server_log.txt"
+            defaultConfig["Other"]["LogFile"] = "LogFile/server_log.txt";
 
             // Save the default config to the file
             var parser = new FileIniDataParser();
@@ -454,16 +454,21 @@ class FilterWheelMover_server
         FilterWheelMover_server server = new FilterWheelMover_server();
         //Load in the config file
         server.configuration = LoadConfiguration();
-        string logFileName;
+        string logFileName = null;
         try
         {
             logFileName = server.configuration["Other"]["LogFile"];
         }
         catch(Exception ex) 
         {
+            // No valid name specified for log file
             Console.WriteLine(ex.Message);
             Console.WriteLine("Invalid Log File Name.  Log file will be created in root folder.");
-            logFileName = "server_log.txt";
+            if (logFileName == null)
+            {
+                // For some reason this has to be dealt with separately
+                logFileName = "server_log.txt";
+            }
         }
         //Initialize the log file
         using (logFile = new StreamWriter(logFileName, append: false))
