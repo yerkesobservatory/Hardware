@@ -60,6 +60,7 @@ class FilterWheelMover_server
             defaultConfig["Server"]["Port"] = "8080";
             defaultConfig["Server"]["Check Adapters"] = "True";
             defaultConfig["Other"]["Timeout"] = "60";
+            defaultConfig["Other"]["LogFile"] = "LogFile/server_log.txt"
 
             // Save the default config to the file
             var parser = new FileIniDataParser();
@@ -450,15 +451,23 @@ class FilterWheelMover_server
          *  Returns:
          *  0 for success, 1 for failure.
          */
-
+        FilterWheelMover_server server = new FilterWheelMover_server();
+        //Load in the config file
+        server.configuration = LoadConfiguration();
+        string logFileName;
+        try
+        {
+            logFileName = server.configuration["Other"]["LogFile"];
+        }
+        catch(Exception ex) 
+        {
+            Console.WriteLine(ex.Message);
+            Console.WriteLine("Invalid Log File Name.  Log file will be created in root folder.");
+            logFileName = "server_log.txt";
+        }
         //Initialize the log file
-        string logFileName = "server_log.txt";
         using (logFile = new StreamWriter(logFileName, append: false))
-        {            
-            FilterWheelMover_server server = new FilterWheelMover_server();
-            //Load in the config file
-            server.configuration = LoadConfiguration();
-
+        {
             //Initialize the Filter Wheel
             int ret_val = 0;
             ret_val = server.initFW();
