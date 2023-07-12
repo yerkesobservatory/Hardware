@@ -130,6 +130,7 @@ partial class FilterWheelMoverServerService : ServiceBase
             /* Block to get the max number of lines for log file.  
              * Encapsulated in try block to make sure input is valid
              */
+
             MAX_LINES = int.Parse(configuration["Other"]["MaxLines"]);
         }
         catch (Exception ex)
@@ -196,10 +197,19 @@ partial class FilterWheelMoverServerService : ServiceBase
             return 1;
         }
 
-        // Connect to the filter wheel
-        m_FilterWheel = new ASCOM.Com.DriverAccess.FilterWheel(prog_id);
-        m_FilterWheel.Connected = true;
-
+        try
+        {
+            // Connect to the filter wheel
+            m_FilterWheel = new ASCOM.Com.DriverAccess.FilterWheel(prog_id);
+            m_FilterWheel.Connected = true;
+        }
+        catch(Exception ex)
+        {
+            Log(ex.Message);
+            Log(ex.StackTrace);
+            Log("Filter wheel not connected.");
+            return 1;
+        }
         //Wait for filter wheel to start up, 8 seconds
         Thread.Sleep(8000);
         return 0;
