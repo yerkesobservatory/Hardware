@@ -1,18 +1,27 @@
-﻿
-using ASCOM.Common.DeviceInterfaces;
-using System;
+﻿using ASCOM.Common.DeviceInterfaces;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.ServiceProcess;
 using IniParser;
 using IniParser.Model;
-class FilterWheelMover_server
+using System;
+using System.Diagnostics;
+using System.Linq;
+
+partial class FilterWheelMoverServerService : ServiceBase
 {
     //Global variables for this class
     private static StreamWriter logFile;
     IFilterWheelV2 m_FilterWheel;
     Socket socket;
     IniData configuration;
+    int MAX_LINES = 5000; // Assigned dummy value that can be changed from logFile
+    int logLineCount = 0;  // Assigned default value that can be changed if log file is present
+    string logFileName = null;
 
     private void Log(string message)
     {
@@ -26,6 +35,9 @@ class FilterWheelMover_server
         Console.WriteLine(message);
         logFile.WriteLine(message);
         logFile.Flush();
+        // Increment Log file counter and check if length is exceeded
+        logLineCount++;
+        CheckLogFileLineCount();
     }
 
     private void LogError(string message)
@@ -40,8 +52,94 @@ class FilterWheelMover_server
         Console.WriteLine(message);
         logFile.WriteLine(errorPrefix + message);
         logFile.Flush();
+        // Increment Log file counter and check if length is exceeded
+        logLineCount++;
+        CheckLogFileLineCount();
     }
 
+    private void CheckLogFileLineCount()
+    {
+        /* Simple function that allows for easy checking of length of log file
+         * to determine if it needs to be refreshed.
+         * Args:
+         * None
+         * Returns: 
+         * None
+         */
+        if (logLineCount >= MAX_LINES)
+        {
+            RefreshLogFile();
+        }
+    }
+
+    private void RefreshLogFile()
+    {
+        /* Function to delete the old log file and start anew if the log file crosses the max amount of lines 
+         * Args:
+         * None
+         * Returns:
+         * None
+         */
+        // Delete the log file if it exists
+        if(File.Exists(logFileName))
+        {
+            File.Delete(logFileName);
+        }
+        CreateLogFile();
+        logLineCount = 0;
+        Log("Log File has been refreshed");
+    }
+    private void CreateLogFile()
+    {
+        /* Method that creates a log file using the location specified in the config file, defaulting to root if necessary.
+         * Also updates the max lines value, defaulting to 5000 if necessary.
+         * Args:
+         * None
+         * Returns:
+         * None
+         */
+
+        try
+        {
+            // Try to create a log file at the specified location before defaulting to root
+            logFileName = configuration["Other"]["LogFile"];
+            // Parse the logfile location
+            string dir = logFileName.Substring(0, logFileName.LastIndexOf('\\'));
+            //Create directory if necessary
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            logFile = new StreamWriter(logFileName, append: false);
+        }
+        catch (Exception ex)
+        {
+            // No valid name specified for log file
+            Console.WriteLine(ex.Message);
+            Console.WriteLine("Invalid Log File Name.  Log file will be created in root folder.");
+        }
+        if (logFileName == null)
+        {
+            // For some reason this has to be dealt with separately
+            string rootFolderPath = AppDomain.CurrentDomain.BaseDirectory;
+            logFileName = rootFolderPath+"\\server_log.txt";
+            logFile = new StreamWriter(logFileName, append: false);
+        }
+        try
+        {
+            /* Block to get the max number of lines for log file.  
+             * Encapsulated in try block to make sure input is valid
+             */
+            MAX_LINES = int.Parse(configuration["Other"]["MaxLines"]);
+        }
+        catch (Exception ex)
+        {
+            //Invalid max lines value
+            Console.WriteLine(ex.Message);
+            Console.WriteLine("Invalid Max Lines. Set to 5000");
+            MAX_LINES = 5000;
+        }
+    }
     public static IniData LoadConfiguration()
     {
         /* This method loads the config file with address, port, and timeout values.
@@ -51,7 +149,9 @@ class FilterWheelMover_server
          * Returns:
          * IniData fileParser:  A parser that lets you read in values in other methods
          */
-        string configFilePath = "config.ini";
+        // Set the config path to the root directory of the program + config.ini
+        string rootFolderPath = AppDomain.CurrentDomain.BaseDirectory;
+        string configFilePath = rootFolderPath + "\\config.ini";
         if (!File.Exists(configFilePath))
         {
             // Create a new config file with default values
@@ -60,8 +160,8 @@ class FilterWheelMover_server
             defaultConfig["Server"]["Port"] = "8080";
             defaultConfig["Server"]["Check Adapters"] = "True";
             defaultConfig["Other"]["Timeout"] = "60";
-            defaultConfig["Other"]["LogFile"] = "LogFile\\server_log.txt";
-
+            defaultConfig["Other"]["LogFile"] = rootFolderPath+"\\server_log.txt"; //Make the default location the root directory
+            defaultConfig["Other"]["MaxLines"] = "5000";
             // Save the default config to the file
             var parser = new FileIniDataParser();
             parser.WriteFile(configFilePath, defaultConfig);
@@ -85,24 +185,24 @@ class FilterWheelMover_server
 
         var prog_id = "ASCOM.SBIG.USB_FW.FilterWheel";
 
-         try
-         {
+        try
+        {
             // Use in-built ASCOM functionality to connect to the filter wheel
             prog_id = "ASCOM.SBIG.USB_FW.FilterWheel";
-         }
-         catch (InvalidOperationException e)
-         {
+        }
+        catch (InvalidOperationException e)
+        {
             Log("Accessing remotely, defaulting to SBIG.USB_FW");
             return 1;
-         }
+        }
 
-         // Connect to the filter wheel
-         m_FilterWheel = new ASCOM.Com.DriverAccess.FilterWheel(prog_id);
-         m_FilterWheel.Connected = true;
+        // Connect to the filter wheel
+        m_FilterWheel = new ASCOM.Com.DriverAccess.FilterWheel(prog_id);
+        m_FilterWheel.Connected = true;
 
-         //Wait for filter wheel to start up, 8 seconds
-         Thread.Sleep(8000);
-         return 0;
+        //Wait for filter wheel to start up, 8 seconds
+        Thread.Sleep(8000);
+        return 0;
     }
 
     int setFilterWheel(short pos)
@@ -113,7 +213,7 @@ class FilterWheelMover_server
          *  Returns:
          *  int: 0 for success, no other exceptions currently handled
          */
-        
+
         int FILTER_WHEEL_TIME_OUT = int.Parse(configuration["Other"]["Timeout"]); //Pull timeout from config file
         DateTime StartTime;
         m_FilterWheel.Position = pos;
@@ -225,21 +325,21 @@ class FilterWheelMover_server
                 Log(rtn);
                 return rtn;
             }
-         }
-         else
-         {
-             //Parse string using space as the delimiter
-             string[] words = line.Split(' ');
+        }
+        else
+        {
+            //Parse string using space as the delimiter
+            string[] words = line.Split(' ');
 
-             //Check first token is "set"
-             if (words[0] != "set")
-             {
+            //Check first token is "set"
+            if (words[0] != "set")
+            {
                 string rtn = "Invalid input";
                 LogError(rtn);
                 return rtn;
-             }
-             else
-             {
+            }
+            else
+            {
                 string rtn;
                 //Parse the number and send it to setFilterWheel()
                 short pos;
@@ -254,7 +354,7 @@ class FilterWheelMover_server
                 if (pos > FILTER_NUMBER - 1 || pos < 0)
                 {
                     //Given an invalid number
-                    rtn = "Enter a valid filter position (0-"+(FILTER_NUMBER-1)+")";
+                    rtn = "Enter a valid filter position (0-" + (FILTER_NUMBER - 1) + ")";
                     LogError(rtn);
                     return rtn;
                 }
@@ -267,9 +367,9 @@ class FilterWheelMover_server
                 }
                 try
                 {
-                   /* Try to print the filter name out.  If index out of bounds, warn and just give pos.
-                    * This is only a problem if the list in config is too short
-                    */
+                    /* Try to print the filter name out.  If index out of bounds, warn and just give pos.
+                     * This is only a problem if the list in config is too short
+                     */
                     rtn = "Filter Wheel set to position " + pos.ToString() + ". This is the " + FILTER_LIST[pos] + " filter.";
                     Log(rtn);
                     return rtn;
@@ -281,7 +381,7 @@ class FilterWheelMover_server
                     return rtn;
                 }
             }
-         }
+        }
     }
     int initSocket()
     {
@@ -311,7 +411,7 @@ class FilterWheelMover_server
         }
         try
         {
-            if(CHECK_ADAPTERS == true)
+            if (CHECK_ADAPTERS == true)
             {   // Check all the adapters first then go to fall back
                 var host = Dns.GetHostEntry(Dns.GetHostName());
                 foreach (var ip in host.AddressList)
@@ -362,7 +462,7 @@ class FilterWheelMover_server
                 Log("Waiting for a connection...");
                 return 0;
             }
-        }    
+        }
         catch (Exception e)
         {
             LogError("Error initializing socket.  Exiting");
@@ -386,7 +486,7 @@ class FilterWheelMover_server
 
             Log("Client Connected!");
 
-            while(clientSocket.Connected)
+            while (clientSocket.Connected)
             {
                 //Receive data from the client
                 byte[] buffer = new byte[4096];
@@ -442,81 +542,86 @@ class FilterWheelMover_server
         int ret_val = receiveAndSend();
         return ret_val;
     }
-
-    static void Main(string[] args)
+    protected override async void OnStart(string[] args)
     {
-        /* Main method to start execution.  Initializes socket and filter wheel, then receives and sends input, then closes and cleans up.
-         *  Args:
-         *  string[] args: (ignore my little rant) omg I thought I was done with you nobody knows what you do 
-         *  Returns:
-         *  0 for success, 1 for failure.
-         */
-        FilterWheelMover_server server = new FilterWheelMover_server();
+        /* Initializes socket and filter wheel, then receives and sends input, then closes and cleans up.
+        *  Args:
+        *  string[] args: (ignore my little rant) omg I thought I was done with you nobody knows what you do 
+        *  Returns:
+        *  0 for success, 1 for failure.
+        */
+
+
+
         //Load in the config file
-        server.configuration = LoadConfiguration();
-        string logFileName = null;
-        try
+        configuration = LoadConfiguration();
+        logFileName = configuration["Other"]["LogFile"];
+        //Create a new logFile as needed.  Otherwise use the existing one.
+        if (File.Exists(logFileName))
         {
-            // Try to create a log file at the specified location before defaulting to root
-            logFileName = server.configuration["Other"]["LogFile"];
-            // Parse the logfile location
-            string dir = logFileName.Substring(0, logFileName.LastIndexOf('\\'));
-            //Create directory if necessary
-            if(!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-            logFile = new StreamWriter(logFileName, append: false);
+            //Get the number of lines present
+            logLineCount = File.ReadLines(logFileName).Count();
+            logFile = new StreamWriter(logFileName, append: true);
         }
-        catch(Exception ex) 
+        else
         {
-            // No valid name specified for log file
-            Console.WriteLine(ex.Message);
-            Console.WriteLine("Invalid Log File Name.  Log file will be created in root folder.");
+            CreateLogFile();
         }
-        if (logFileName == null)
-        {
-            // For some reason this has to be dealt with separately
-            logFileName = "server_log.txt";
-            logFile = new StreamWriter(logFileName, append: false);
-        }
-        //Initialize the log file
         using (logFile)
         {
             //Initialize the Filter Wheel
             int ret_val = 0;
-            ret_val = server.initFW();
+            ret_val = initFW();
             if (ret_val == 1)
             {
                 //An error occurred during Filter Wheel initialization
-                Environment.Exit(1);
+                return;
             }
 
             //Initialize socket
-            ret_val = server.initSocket();
+            ret_val = initSocket();
             if (ret_val == 1)
             {
                 //An error occurred during socket initialization
-                Environment.Exit(1);
+                return;
             }
 
-            //Receive and Send from/to  client
-            ret_val = server.receiveAndSend();
+            //Receive and Send from/to client. Start this in another thread to allow server state to transition.
+            Task<int> task = Task.Run(() => receiveAndSend());
+
+            //Wait for the task to complete (aka all running of program)
+            ret_val = await task;    
+
             if (ret_val == 1)
             {
                 //An error occurred during the receive and send process
-                Environment.Exit(1);
-            }
-            else if (ret_val == 2)
-            {
-                //Wait again for connection
-
+                return;
             }
         }
     }
+
+    private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void OnStop()
+    {
+        //No clean up required.  Everything is handled cleanly by the main function anyways.
+        base.OnStop();
+    }
 }
-
-
-
-
-
+class Program
+{
+    // Simple class with only a main method to run the OnStart method.  Required because this is now a service.
+    static void Main(string[] args)
+    {
+        // Execution of program starts here.  Serves to hand over execution to the service.
+        ServiceBase[] servicesToRun;
+        servicesToRun = new ServiceBase[]
+        {
+            new FilterWheelMoverServerService()
+        };
+        ServiceBase.Run(servicesToRun);
+    }
+}
