@@ -5,8 +5,31 @@ This repo contains the code required to remotely move the SBIG AFW-10 filter whe
 ## Installation
 
 ### Server Side
-Installation on the server side requires a machine running Windows.  The server also requires the .NET framework to be installed (recommended is 4.8.0).  You must also have the SBIG USB to Filter Wheel driver installed on your server, along with the additional ASCOM software that is required for the driver to run properly.  Beyond that, the server ships with all necessary .dll files to work out of the box.
+Installation on the server side requires a machine running Windows.  The server also requires the .NET framework to be installed (recommended is 4.7.2).  You must also have the SBIG USB to Filter Wheel driver installed on your server, along with the additional ASCOM software that is required for the driver to run properly.  Beyond that, the server ships with all tghe necessary dependencies.
 
+Set up for the server is slightly involved as it requires us to create a Windows service and set up the firewall correctly.  The following steps should be followed to set up the server:
+
+- Download the package from GitHub.  Alternatively, download the necessary files from the Google Drive folder in SEO.
+
+- Open the config.ini file in the Server folder and modify it as per your liking (options are given in the section below in this file).  By default, the application will query all network adapters and open a port on 8080 on the outgoing adapter.  If it cannot find the outgoing adapter, it will default to 127.0.0.1 (the loopback address).
+
+- Open a command prompt with administrator privileges.
+
+- In the command prompt, execute the following command:
+```
+sc.exe create <service name> binPath= "<path to exe>" start= auto
+```
+Ensure you give the full path name, ending in FWMover_Service.exe.  Close your command prompt after that.
+
+- Go to the start menu and search for "Services".  Open the Services application.  Find the service you just created, right click on it, and select "Properties".  Check in the "General" tab that the "Startup type" is set to "Automatic".  If it is not, change it to "Automatic". 
+
+- Then go to the "Recovery" tab and chose what will happen if the service crashes.  We recommend setting all three options to "Restart the Service", and leaving "Restart Service After" to 1 minute.  Click "Apply" and then "OK".
+
+- Now right click on the service again, and select "Start".  The service should now be running, which you will see in the status column.
+
+- Now go to your advanced firewall settings.  Click on the option to make an inbound rule.  Select the "custom" option. Then when asked to select a program, select "All services".  Then, when prompted for a port, select the port on which the socket is to be opened.  If you did not modify the config file, this is 8080.  Give the rule a suitable name and close the window.
+
+- Test the program by running the client side code from another computer.
 ### Client Side
 The client side simply requires python to run.  No additional packages are needed.  
 ## Server Side
@@ -24,6 +47,7 @@ The server has an associated config file called config.ini.  This file has param
 - Timeout: The amount of time the server will wait for a response from the filter wheel before timing out.  Default value is 60 seconds.
 Beware that the filter wheel takes some time to set the correct position, so you should not make this value too low.
 - LogFile: The location at which the log file will be generated.  Please use \ when specifying paths.  Eg: LogFile\Path\Here\log.txt
+- MaxLines;  The maximum number of lines the log file can have before it is cleared.  Default value is 5000.
 - List (optional):  A comma separated list of the names of your filters.  The default config does not have this, but you can add it by adding a line below "Timeout".  If you have 10 filters named a to j, you would add a line that looks like this:
 List = a,b,c,d,e,f,g,h,i,j
 If you do not provide a list, the server will use the names provided to ASCOM when the wheel was being set up.  If you do provide a list, the server will use the names in the list, and will ignore the names provided to ASCOM.  The names in the list must be comma separated, and must be in the same order as the filters are in the wheel.
