@@ -152,7 +152,7 @@ partial class FilterWheelMoverServerService : ServiceBase
          */
         // Set the config path to the root directory of the program + config.ini
         string rootFolderPath = AppDomain.CurrentDomain.BaseDirectory;
-        string configFilePath = rootFolderPath + "\\config.ini";
+        string configFilePath = rootFolderPath + "config.ini";
         if (!File.Exists(configFilePath))
         {
             // Create a new config file with default values
@@ -161,7 +161,7 @@ partial class FilterWheelMoverServerService : ServiceBase
             defaultConfig["Server"]["Port"] = "8080";
             defaultConfig["Server"]["Check Adapters"] = "True";
             defaultConfig["Other"]["Timeout"] = "60";
-            defaultConfig["Other"]["LogFile"] = rootFolderPath+"\\server_log.txt"; //Make the default location the root directory
+            defaultConfig["Other"]["LogFile"] = rootFolderPath+"server_log.txt"; //Make the default location the root directory
             defaultConfig["Other"]["MaxLines"] = "5000";
             // Save the default config to the file
             var parser = new FileIniDataParser();
