@@ -549,8 +549,24 @@ partial class FilterWheelMoverServerService : ServiceBase
         }
 
         // Start waiting again if client closed
-        int ret_val = receiveAndSend();
+        int ret_val = 2;
         return ret_val;
+    }
+    void receiveAndSendWrapper()
+    {
+        /* Very simple wrapper method for the receiveAndSend method
+         * Required because program is now written as a service, 
+         * and not as a client executable.
+         * Args:
+         * None
+         * Returns:
+         * None
+         */
+        int ret_val = 2;
+        while (ret_val != 0) 
+        {
+            ret_val = receiveAndSend();
+        }
     }
     protected override async void OnStart(string[] args)
     {
@@ -561,11 +577,13 @@ partial class FilterWheelMoverServerService : ServiceBase
         *  0 for success, 1 for failure.
         */
 
-
+        // Obtain a service controller to force quit the service if required
+        ServiceController serviceController = new ServiceController();
 
         //Load in the config file
         configuration = LoadConfiguration();
         logFileName = configuration["Other"]["LogFile"];
+
         //Create a new logFile as needed.  Otherwise use the existing one.
         if (File.Exists(logFileName))
         {
@@ -585,6 +603,8 @@ partial class FilterWheelMoverServerService : ServiceBase
             if (ret_val == 1)
             {
                 //An error occurred during Filter Wheel initialization
+                Log("Terminating");
+                serviceController.Stop();
                 return;
             }
 
@@ -593,20 +613,22 @@ partial class FilterWheelMoverServerService : ServiceBase
             if (ret_val == 1)
             {
                 //An error occurred during socket initialization
+                Log("Terminating");
+                serviceController.Stop();
                 return;
             }
 
-            //Receive and Send from/to client. Start this in another thread to allow server state to transition.
-            Task<int> task = Task.Run(() => receiveAndSend());
-
-            //Wait for the task to complete (aka all running of program)
-            ret_val = await task;    
-
-            if (ret_val == 1)
+            if (ret_val == 0)
             {
-                //An error occurred during the receive and send process
-                return;
+                //Receive and Send from/to client. Start this in another thread to allow server state to transition.
+                Task task = Task.Run(() => receiveAndSendWrapper());
+
+                //Wait for the task to complete (aka all running of program)
+                await task;
             }
+            Log("Terminating");
+            serviceController.Stop();
+            return;
         }
     }
 
@@ -618,7 +640,11 @@ partial class FilterWheelMoverServerService : ServiceBase
     protected override void OnStop()
     {
         //No clean up required.  Everything is handled cleanly by the main function anyways.
-        base.OnStop();
+        using(logFile)
+        {
+            Log("Terminating Service");
+            base.OnStop();
+        }
     }
 }
 class Program
