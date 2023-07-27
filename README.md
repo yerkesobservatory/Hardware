@@ -27,9 +27,17 @@ Ensure you give the full path name, ending in FWMover_Service.exe.  Close your c
 
 - Now right click on the service again, and select "Start".  The service should now be running, which you will see in the status column.
 
-- Now go to your advanced firewall settings.  Click on the option to make an inbound rule.  Select the "custom" option. Then when asked to select a program, select "All services".  Then, when prompted for a port, select the port on which the socket is to be opened.  If you did not modify the config file, this is 8080.  Give the rule a suitable name and close the window.
+- Now go to your advanced firewall settings.  Click on the option to make an inbound rule.  Select the "custom" option. Then when asked to select a program, select "All services".  Then, on the Protocol and Ports page, first select TCP under "Protocol Type", and then select the port on which the socket is to be opened.  If you did not modify the config file, this is 8080.
 
-- Test the program by running the client side code from another computer.
+- On the "Scope" page, in remote IP addresses, switch to "These IP Addresses" and add the address of the client if you only have one client (in the case of SEO, this is Aster's outgoing IP address).  Then click "Next".
+
+- On the "Action" page, select "Allow the connection".  Then click "Next".
+
+- On the "Profile" page, select all three options.  Then click "Next".
+
+- Give the rule a suitable name and close the window.
+
+- Test the program by running the client side code from the computer that was added to the firewall.  If the program does not work, check the log file in the Server folder for any errors.
 ### Client Side
 The client side simply requires python to run.  No additional packages are needed.  
 ## Server Side
