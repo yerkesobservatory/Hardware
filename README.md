@@ -74,9 +74,11 @@ The client side code is contained in the file "fw_mover_client.py".  The client 
 - server_shutdown: Shuts down the server.  ONLY USE THIS IF YOU KNOW WHAT YOU'RE DOING.
 
 Usage: 
-```
+
+```bash
 python/ python3 fw_mover_client.py \<command\> [\<number\>] [<server_address>] [<server_port>]
 ```
+
 ### Client Config
 The client side ships with a config file by default, but it is not required.  The config file should be called fw_mover_client_config.ini, and 
 should be in the same directory as the client code.  The config file has parameters grouped under different headings.

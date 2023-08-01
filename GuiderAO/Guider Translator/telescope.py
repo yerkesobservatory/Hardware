@@ -18,6 +18,8 @@ import logging
 from shr import PropertyResponse, MethodResponse, PreProcessRequest, \
                 get_request_field, to_bool
 from exceptions import *        # Nothing but exception classes 
+from telescope_device import TelescopeDevice
+
 def write_numbers_to_file(direction, num1, duration, num2, filename):
     with open(filename, 'a') as file:
         file.write(f'DIRECTION={num1}\tDURATION={num2}\n')
@@ -32,7 +34,7 @@ def configure_logger(log_file, log_level=logging.INFO):
     logger.setLevel(log_level)
 
     # Create a file handler and set the level to log to the file
-    file_handler = logging.FileHandler(log_file)
+    file_handler = logging.FileHandler(log_file, mode = 'a')
     file_handler.setLevel(log_level)
 
     # Create a console handler and set the level to log to the console
@@ -74,7 +76,7 @@ def write_numbers_to_file(dir, dur, filename):
 maxdev = 0                      # Single instance
 
 # -----------
-# DEVICE INFO
+# TELESCOPE DEVICE INFO
 # -----------
 # Static metadata not subject to configuration changes
 ## EDIT FOR YOUR DEVICE ##
@@ -90,6 +92,16 @@ class TelescopeMetadata:
     InterfaceVersion = 3       # The interface version number that this device supports. 
                                 # Should return 3 for this interface version.
 
+# --------------------
+# TELESCOPE DEVICE CLASS
+# --------------------
+tel_dev = None
+def start_telescope_device(logger: logger):
+    logger = logger
+    global tel_dev
+    tel_dev = TelescopeDevice(logger)
+
+start_telescope_device(logger)
 # --------------------
 # RESOURCE CONTROLLERS
 # --------------------
@@ -146,16 +158,43 @@ class SupportedActions():
         resp.text = PropertyResponse([], req).json  # Not PropertyNotImplemented
 
 @before(PreProcessRequest(maxdev))
+class connected:
+    """
+    Retrieves or sets the connected state of the device
+
+    * Set True to connect to the device hardware. Set False to disconnect
+      from the device hardware. Client can also read the property to check
+      whether it is connected. This reports the current hardware state.
+    * Multiple calls setting Connected to true or false must not cause
+      an error.
+    """
+    def on_get(self, req: Request, resp: Response, devnum: int):
+        resp.text = PropertyResponse(tel_dev.connected, req).json
+
+    def on_put(self, req: Request, resp: Response, devnum: int):
+        conn_str = get_request_field('Connected', req)
+        conn = to_bool(conn_str)              # Raises 400 Bad Request if str to bool fails
+
+        try:
+            # ----------------------
+            tel_dev.connected = conn
+            # ----------------------
+            resp.text = MethodResponse(req).json
+        except Exception as ex:
+            resp.text = MethodResponse(req, # Put is actually like a method :-(
+                            DriverException(0x500, f'{self.__class__.__name__} failed', ex)).json
+            
+@before(PreProcessRequest(maxdev))
 class alignmentmode:
 
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0 #Alt/Az alignment
+            val = tel_dev.alignment_mode
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -167,13 +206,13 @@ class altitude:
     # The Altitude above the local horizon of the telescope's 
     # current position (degrees, positive up)
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0 #TODO: Query the telescope for its altitude
+            val = tel_dev.altitude #TODO: Query the telescope for its altitude
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -185,13 +224,13 @@ class aperturearea:
     # The area of the telescope's aperture, 
     # taking into account any obstructions (square meters)
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0.196 #Area of the SEO Telescope mirror
+            val = tel_dev.aperture_area #Area of the SEO Telescope mirror
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -202,13 +241,13 @@ class aperturearea:
 class aperturediameter:
     # The telescope's effective aperture diameter (meters)
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0.5 #Aperture diameter of SEO telescope
+            val = tel_dev.aperture_diameter #Aperture diameter of SEO telescope
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -221,13 +260,13 @@ class athome:
     # Set only following a FindHome() operation, and reset with any slew operation. 
     # This property must be False if the telescope does not support homing.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = False #TODO: Query the Telescope to see if it is in the home position
+            val = tel_dev.at_home # Query the Telescope to see if it is in the home position
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -239,13 +278,13 @@ class atpark:
     # True if the telescope has been put into the parked state by the Park() method. 
     # Set False by calling the Unpark() method.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = False #TODO: Query the telescope if it is in the park position
+            val = tel_dev.at_park # Query the telescope if it is in the park position
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -257,13 +296,13 @@ class azimuth:
     # The azimuth at the local horizon of the telescope's current position 
     # (degrees, North-referenced, positive East/clockwise).
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0 #TODO: Query the telescope to get its Azimuth
+            val = tel_dev.azimuth # Query the telescope to get its Azimuth
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -274,13 +313,13 @@ class azimuth:
 class canfindhome:
     # True if this telescope is capable of programmed finding its home position
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = True #TODO: Check with Marc and Dick about this
+            val = tel_dev.can_find_home # Query the telescope to see if it can find home
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -291,13 +330,13 @@ class canfindhome:
 class canpark:
     # True if this telescope is capable of programmed parking (Park()method)
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = True #TODO: Check with Marc and Dick about this
+            val = tel_dev.can_park # Query the telescope to see if it can park
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -310,13 +349,13 @@ class canpulseguide:
     # (via the PulseGuide(GuideDirections, Int32) method)
     # This is what we use to implement movement of SEO Telescope
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = True #This is what we will implement
+            val = tel_dev.can_pulse_guide # Query the telescope to see if it can pulse guide
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -328,13 +367,13 @@ class cansetdeclinationrate:
     # True if the DeclinationRate property can be changed to 
     # provide offset tracking in the declination axis.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = False #TODO: Check with Marc and Dick 
+            val = tel_dev.can_set_declination_rate # Query the telescope to see if it can set declination rate
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -346,13 +385,13 @@ class cansetguiderates:
     # True if the guide rate properties used for 
     # PulseGuide(GuideDirections, Int32) can be adjusted.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = True #TODO: Check with Marc and Dick 
+            val = tel_dev.can_set_guide_rates # Query the telescope to see if it can set guide rates 
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -364,13 +403,13 @@ class cansetpark:
     # True if this telescope is capable of programmed 
     # setting of its park position (SetPark() method)
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = False #TODO: Check with Marc and Dick 
+            val = tel_dev.can_set_park # Query the telescope to see if it can set park 
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -382,13 +421,13 @@ class cansetpierside:
     # True if the SideOfPier property can be set, 
     # meaning that the mount can be forced to flip.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = False #TODO: Check with Marc and Dick 
+            val = tel_dev.can_set_pier_side # Query the telescope to see if it can set pier side 
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -400,13 +439,13 @@ class cansetrightascensionrate:
     # True if the RightAscensionRate property can be changed to 
     # provide offset tracking in the right ascension axis.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = False #TODO: Check with Marc and Dick 
+            val = tel_dev.can_set_right_ascension_rate # Query the telescope to see if it can set right ascension rate 
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -418,13 +457,13 @@ class cansettracking:
     # True if the Tracking property can be changed, 
     # turning telescope sidereal tracking on and off.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = True #Must be true to allow MaxIm DL to track
+            val = tel_dev.can_set_tracking # Query the telescope to see if it can set tracking
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -436,13 +475,13 @@ class canslew:
     # True if this telescope is capable of programmed slewing 
     # (synchronous or asynchronous) to equatorial coordinates
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = True #We will use nudge commands to slew the mount
+            val = tel_dev.can_slew # Query the telescope to see if it can slew
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -454,7 +493,7 @@ class canslewaltaz:
     # True if this telescope is capable of programmed slewing 
     # (synchronous or asynchronous) to local horizontal coordinates
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -472,13 +511,13 @@ class canslewaltazasync:
     # True if this telescope is capable of programmed asynchronous 
     # slewing to local horizontal coordinates
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = False
+            val = tel_dev.can_slew_alt_az_async # Query the telescope to see if it can slew to altaz asynchronously
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -490,13 +529,13 @@ class canslewasync:
     # True if this telescope is capable of programmed asynchronous 
     # slewing to equatorial coordinates.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = True
+            val = tel_dev.can_slew_async # Query the telescope to see if it can slew asynchronously
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -508,13 +547,13 @@ class cansync:
     # True if this telescope is capable of programmed synching 
     # to equatorial coordinates.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = False 
+            val = tel_dev.can_sync # Query the telescope to see if it can sync
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -525,13 +564,13 @@ class cansync:
 class cansyncaltaz:
 
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = False #I have no clue
+            val = tel_dev.can_sync_alt_az # Query the telescope to see if it can sync to altaz
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -542,13 +581,13 @@ class cansyncaltaz:
 class canunpark:
 
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = True #TODO: Query to check if it is raining, then in that case, this is false
+            val = tel_dev.can_unpark # Query the telescope to see if it can unpark
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -561,13 +600,13 @@ class declination:
     # in the coordinate system given by the EquatorialSystem property. 
     # Reading the property will raise an error if the value is unavailable.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0 #TODO: Query Aster to get the declination
+            val = tel_dev.declination # Query the telescope for the declination
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -578,13 +617,13 @@ class declination:
 class declinationrate:
     # The declination tracking rate (arcseconds per SI second, default = 0.0)
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0.5 #TODO: Ask Marc and Dick
+            val = tel_dev.declination_rate # Query the telescope for the declination rate
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -592,7 +631,7 @@ class declinationrate:
                             DriverException(0x500, 'Telescope.Declinationrate failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -612,7 +651,7 @@ class declinationrate:
                             DriverException(0x500, 'Telescope.Declinationrate failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -629,13 +668,13 @@ class declinationrate:
 class doesrefraction:
     # True if the telescope or driver applies atmospheric refraction to coordinates.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = False #SEO does not do atmospheric refration to coordinates
+            val = tel_dev.does_refraction # Query the telescope for the refraction status
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -643,7 +682,7 @@ class doesrefraction:
                             DriverException(0x500, 'Telescope.Doesrefraction failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -660,7 +699,7 @@ class doesrefraction:
                             DriverException(0x500, 'Telescope.Doesrefraction failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -677,13 +716,13 @@ class doesrefraction:
 class equatorialsystem:
     # Equatorial coordinate system used by this telescope (e.g. Topocentric or J2000).
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 2 #TODO Return correct type of value (equatorialSystem)
+            val = tel_dev.equatorial_system # Query the telescope for the equatorial system
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -694,7 +733,7 @@ class equatorialsystem:
 class focallength:
     # The telescope's focal length, meters
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -711,13 +750,13 @@ class focallength:
 class guideratedeclination:
     # The current Declination movement rate offset for telescope guiding (degrees/sec)
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0.1 #TODO: Check for SEO
+            val = tel_dev.guide_rate_declination # Query the telescope for the guide rate
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -725,7 +764,7 @@ class guideratedeclination:
                             DriverException(0x500, 'Telescope.Guideratedeclination failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -747,7 +786,7 @@ class guideratedeclination:
                             DriverException(0x500, 'Telescope.Guideratedeclination failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -764,13 +803,13 @@ class guideratedeclination:
 class guideraterightascension:
     # The current Right Ascension movement rate offset for telescope guiding (degrees/sec)
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0.1 #TODO: Check for SEO
+            val = tel_dev.guide_rate_right_ascension # Query the telescope for the guide rate
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -778,7 +817,7 @@ class guideraterightascension:
                             DriverException(0x500, 'Telescope.Guideraterightascension failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -800,7 +839,7 @@ class guideraterightascension:
                             DriverException(0x500, 'Telescope.Guideraterightascension failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -818,13 +857,13 @@ class guideraterightascension:
 class ispulseguiding:
     # True if a PulseGuide(GuideDirections, Int32) command is in progress, False otherwise
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = False
+            val = tel_dev.is_pulse_guiding # Query the telescope for the pulse guiding status
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -836,13 +875,13 @@ class rightascension:
     # The right ascension (hours) of the telescope's current equatorial coordinates, 
     # in the coordinate system given by the EquatorialSystem property
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0 #TODO Query Mount for right ascension
+            val = tel_dev.right_ascension # Query the telescope for the right ascension
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -854,13 +893,13 @@ class rightascensionrate:
     # The right ascension tracking rate offset from sidereal 
     # (seconds per sidereal second, default = 0.0)
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0.1
+            val = tel_dev.right_ascension_rate # Query the telescope for the right ascension rate
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -868,7 +907,7 @@ class rightascensionrate:
                             DriverException(0x500, 'Telescope.Rightascensionrate failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -890,7 +929,7 @@ class rightascensionrate:
                             DriverException(0x500, 'Telescope.Rightascensionrate failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -907,13 +946,13 @@ class rightascensionrate:
 class sideofpier:
     # Indicates the pointing state of the mount.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0
+            val = tel_dev.side_of_pier # Query the telescope for the side of pier
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -921,7 +960,7 @@ class sideofpier:
                             DriverException(0x500, 'Telescope.Sideofpier failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -943,7 +982,7 @@ class sideofpier:
                             DriverException(0x500, 'Telescope.Sideofpier failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -960,13 +999,13 @@ class sideofpier:
 class siderealtime:
     # The local apparent sidereal time from the telescope's internal clock (hours, sidereal)
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0 #Query Aster for this.  Just a double val.
+            val = tel_dev.sidereal_time # Query the telescope for the sidereal time
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -978,13 +1017,13 @@ class siteelevation:
     # The elevation above mean sea level (meters) of the 
     # site at which the telescope is located
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 144 #TODO: Get this from Marc
+            val = tel_dev.site_elevation # Query the telescope for the site elevation
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -992,7 +1031,7 @@ class siteelevation:
                             DriverException(0x500, 'Telescope.Siteelevation failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1014,7 +1053,7 @@ class siteelevation:
                             DriverException(0x500, 'Telescope.Siteelevation failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1031,13 +1070,13 @@ class siteelevation:
 class sitelatitude:
     # The geodetic(map) latitude (degrees, positive North, WGS84) of the site at which the telescope is located.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 50 #TODO: Get real value
+            val =  tel_dev.site_latitude # Query the telescope for the site latitude
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -1045,7 +1084,7 @@ class sitelatitude:
                             DriverException(0x500, 'Telescope.Sitelatitude failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1067,7 +1106,7 @@ class sitelatitude:
                             DriverException(0x500, 'Telescope.Sitelatitude failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1084,13 +1123,13 @@ class sitelatitude:
 class sitelongitude:
     # The longitude (degrees, positive East, WGS84) of the site at which the telescope is located.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 70 # Get real value
+            val = tel_dev.site_longitude # Query the telescope for the site longitude
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -1098,7 +1137,7 @@ class sitelongitude:
                             DriverException(0x500, 'Telescope.Sitelongitude failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1120,7 +1159,7 @@ class sitelongitude:
                             DriverException(0x500, 'Telescope.Sitelongitude failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1138,13 +1177,13 @@ class slewing:
     # True if telescope is in the process of moving in response to one of the Slew methods 
     # or the MoveAxis(TelescopeAxes, Double) method, False at all other times.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = False 
+            val = tel_dev.slewing # Query the telescope for the slewing state 
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -1155,13 +1194,13 @@ class slewing:
 class slewsettletime:
     # Specifies a post-slew settling time (sec.).
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0.5 #TODO: We could just set this to 1 sec, let's ask Marc
+            val = tel_dev.slew_settle_time # Query the telescope for the slew settle time
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -1169,7 +1208,7 @@ class slewsettletime:
                             DriverException(0x500, 'Telescope.Slewsettletime failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1191,7 +1230,7 @@ class slewsettletime:
                             DriverException(0x500, 'Telescope.Slewsettletime failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1209,13 +1248,13 @@ class targetdeclination:
     # The declination (degrees, positive North) for the target 
     # of an equatorial slew or sync operation
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0 #Get the target from Aster
+            val = tel_dev.target_declination # Query the telescope for the target declination
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -1223,7 +1262,7 @@ class targetdeclination:
                             DriverException(0x500, 'Telescope.Targetdeclination failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1245,7 +1284,7 @@ class targetdeclination:
                             DriverException(0x500, 'Telescope.Targetdeclination failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1262,13 +1301,13 @@ class targetdeclination:
 class targetrightascension:
     # The right ascension (hours) for the target of an equatorial slew or sync operation
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0 #Get the target from Aster
+            val = tel_dev.target_right_ascension # Query the telescope for the target right ascension
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -1276,7 +1315,7 @@ class targetrightascension:
                             DriverException(0x500, 'Telescope.Targetrightascension failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1298,7 +1337,7 @@ class targetrightascension:
                             DriverException(0x500, 'Telescope.Targetrightascension failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1315,13 +1354,13 @@ class targetrightascension:
 class tracking:
     # The state of the telescope's sidereal tracking drive.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = True #Get this from Aster or MaxIm
+            val = tel_dev.tracking # Query the telescope for the tracking state
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -1329,7 +1368,7 @@ class tracking:
                             DriverException(0x500, 'Telescope.Tracking failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1346,7 +1385,7 @@ class tracking:
                             DriverException(0x500, 'Telescope.Tracking failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1363,13 +1402,13 @@ class tracking:
 class trackingrate:
 # The current tracking rate of the telescope's sidereal drive
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            val = 0
+            val = tel_dev.tracking_rate # Query the telescope for the tracking rate
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -1377,7 +1416,7 @@ class trackingrate:
                             DriverException(0x500, 'Telescope.Trackingrate failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1399,7 +1438,7 @@ class trackingrate:
                             DriverException(0x500, 'Telescope.Trackingrate failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1417,13 +1456,13 @@ class trackingrates:
     # Returns a collection of supported DriveRates values that 
     # describe the permissible values of the TrackingRate property for this telescope type.
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            pass
+            val = tel_dev.tracking_rates # Query the telescope for the tracking rates
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -1434,13 +1473,13 @@ class trackingrates:
 class utcdate:
     # The UTC date/time of the telescope's internal clock
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
         try:
             # ----------------------
-            pass
+            val = tel_dev.utc_date # Query the telescope for the UTC date/time
             # ----------------------
             resp.text = PropertyResponse(val, req).json
         except Exception as ex:
@@ -1448,7 +1487,7 @@ class utcdate:
                             DriverException(0x500, 'Telescope.Utcdate failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1470,7 +1509,7 @@ class utcdate:
                             DriverException(0x500, 'Telescope.Utcdate failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1487,7 +1526,7 @@ class utcdate:
 class abortslew:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1504,7 +1543,7 @@ class abortslew:
 class axisrates:
 
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1521,7 +1560,7 @@ class axisrates:
 class canmoveaxis:
 
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1538,7 +1577,7 @@ class canmoveaxis:
 class destinationsideofpier:
 
     def on_get(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1555,7 +1594,7 @@ class destinationsideofpier:
 class findhome:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1572,7 +1611,7 @@ class findhome:
 class moveaxis:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1602,7 +1641,7 @@ class moveaxis:
                             DriverException(0x500, 'Telescope.Moveaxis failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1619,7 +1658,7 @@ class moveaxis:
 class park:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1636,7 +1675,7 @@ class park:
 class pulseguide:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1664,13 +1703,28 @@ class pulseguide:
                             DriverException(0x500, 'Telescope.Pulseguide failed', ex)).json
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
+        directionstr = get_request_field('Direction', req)      # Raises 400 bad request if missing
+        try:
+            direction = int(directionstr)
+        except:
+            resp.text = MethodResponse(req,
+                            InvalidValueException(f'Direction " + directionstr + " not a valid number.')).json
+            return
+        ### RANGE CHECK AS NEEDED ###       # Raise Alpaca InvalidValueException with details!
+        durationstr = get_request_field('Duration', req)      # Raises 400 bad request if missing
+        try:
+            duration = int(durationstr)
+        except:
+            resp.text = MethodResponse(req,
+                            InvalidValueException(f'Duration " + durationstr + " not a valid number.')).json
+            return
         try:
             # -----------------------------
-            ### DEVICE OPERATION(PARAM) ###
+            tel_dev.pulse_guide(direction, duration)
             # -----------------------------
             resp.text = MethodResponse(req).json
         except Exception as ex:
@@ -1681,7 +1735,7 @@ class pulseguide:
 class setpark:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1698,7 +1752,7 @@ class setpark:
 class slewtoaltaz:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1731,7 +1785,7 @@ class slewtoaltaz:
 class slewtoaltazasync:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1764,7 +1818,7 @@ class slewtoaltazasync:
 class slewtocoordinates:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1797,7 +1851,7 @@ class slewtocoordinates:
 class slewtocoordinatesasync:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1830,7 +1884,7 @@ class slewtocoordinatesasync:
 class slewtotarget:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1847,7 +1901,7 @@ class slewtotarget:
 class slewtotargetasync:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1864,7 +1918,7 @@ class slewtotargetasync:
 class synctoaltaz:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1897,7 +1951,7 @@ class synctoaltaz:
 class synctocoordinates:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1930,7 +1984,7 @@ class synctocoordinates:
 class synctotarget:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
@@ -1947,7 +2001,7 @@ class synctotarget:
 class unpark:
 
     def on_put(self, req: Request, resp: Response, devnum: int):
-        if dummy == True:
+        if not tel_dev.connected:
             resp.text = PropertyResponse(None, req,
                             NotConnectedException()).json
             return
