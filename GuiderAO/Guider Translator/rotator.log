@@ -1,0 +1,9 @@
+2023-07-31T21:28:59.808 ERROR An uncaught OSError exception occurred:
+2023-07-31T21:28:59.808 ERROR [Errno 48] Address already in use
+2023-07-31T21:28:59.809 ERROR '  File "/Users/rohan/Documents/GitHub/Hardware/GuiderAO/Guider Translator/Example Code/app.py", line 275, in <module>\n    main()\n'
+2023-07-31T21:28:59.809 ERROR '  File "/Users/rohan/Documents/GitHub/Hardware/GuiderAO/Guider Translator/Example Code/app.py", line 268, in main\n    with make_server(Config.ip_address, Config.port, falc_app, handler_class=LoggingWSGIRequestHandler) as httpd:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n'
+2023-07-31T21:28:59.809 ERROR '  File "/Users/rohan/anaconda3/envs/alpyca_env/lib/python3.11/wsgiref/simple_server.py", line 154, in make_server\n    server = server_class((host, port), handler_class)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n'
+2023-07-31T21:28:59.809 ERROR '  File "/Users/rohan/anaconda3/envs/alpyca_env/lib/python3.11/socketserver.py", line 456, in __init__\n    self.server_bind()\n'
+2023-07-31T21:28:59.809 ERROR '  File "/Users/rohan/anaconda3/envs/alpyca_env/lib/python3.11/wsgiref/simple_server.py", line 50, in server_bind\n    HTTPServer.server_bind(self)\n'
+2023-07-31T21:28:59.809 ERROR '  File "/Users/rohan/anaconda3/envs/alpyca_env/lib/python3.11/http/server.py", line 136, in server_bind\n    socketserver.TCPServer.server_bind(self)\n'
+2023-07-31T21:28:59.809 ERROR '  File "/Users/rohan/anaconda3/envs/alpyca_env/lib/python3.11/socketserver.py", line 472, in server_bind\n    self.socket.bind(self.server_address)\n'
