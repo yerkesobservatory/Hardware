@@ -42,6 +42,8 @@ Commands:
 """
 import comtypes.client # windows package for COM connection
 import maxim_menu # the python library of operable commands
+from rich.console import Console
+from rich.markdown import Markdown
 
 options = ['set', 'sever', 'expose', 'calibrate', 'calcode', 'stop', 'status', 'track', \
            'starcoords', 'list', 'quit']
@@ -99,7 +101,12 @@ while session == 1:
             session = 1
             continue
         case "list": #returns list of operable commands to the command line
-            print(options)
+            console = Console()
+            fpath = r'C:\Users\NUC\OneDrive\Documents\GitHub\Hardware\GuiderAO\Maxim Scripting Interface\list_cmds.md'
+            with open(fpath) as f:
+
+                md = Markdown(f.read()) # hopefully in the form of a markdown table
+                console.print(md)
             session = 1
             continue
         case "quit": #quits the current session
