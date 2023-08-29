@@ -5,6 +5,7 @@
 from threading import Timer
 from threading import Lock
 from logging import Logger
+import subprocess
 import time
 
 
@@ -57,8 +58,8 @@ class TelescopeDevice:
         self._azimuth = 0
         self._connected = False
         self._declination = 0
-        self._guide_rate_declination = 0.1
-        self._guide_rate_right_ascension = 0.1
+        self._guide_rate_declination = 0.005
+        self._guide_rate_right_ascension = 0.005
         self._is_pulse_guiding = False
         self._right_ascension = 0
         self._sidereal_time = 0.1
@@ -313,7 +314,12 @@ class TelescopeDevice:
     @property
     def altitude(self) -> float:
         self._lock.acquire()
-        res = self._altitude
+        # Make a call to aster to get the altitude
+        command = 'tx where'
+        process = subprocess.run(command.split(), stdout=subprocess.PIPE)
+        output = process.stdout.decode('utf-8')
+        # Parse the output
+
         self._lock.release()
         return res
 
@@ -524,7 +530,7 @@ class TelescopeDevice:
         elif direction == 2:
             self.logger.info("Pulse guide: E")
         elif direction == 3:
-            self,logger.info("Pulse guide: W")
+            self.logger.info("Pulse guide: W")
         self.logger.info("Pulse guide: {} ms".format(duration))
         time.sleep(duration / 1000)
         self._is_pulse_guiding = False

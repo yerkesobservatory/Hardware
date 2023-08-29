@@ -1,0 +1,594 @@
+2023-08-24T21:44:14.171 INFO ==STARTUP== Serving on :5555. Time stamps are UTC.
+2023-08-24T21:44:16.921 INFO 128.135.4.118 -> PUT /api/v1/telescope/0/connected
+2023-08-24T21:44:16.922 INFO 128.135.4.118 -> {'ClientTransactionID': '1', 'ClientID': '48524', 'Connected': 'True'}
+2023-08-24T21:44:16.922 INFO [connected]
+2023-08-24T21:44:16.968 INFO 128.135.4.118 -> GET /api/v1/telescope/0/canpulseguide?ClientTransactionID=2&ClientID=48524
+2023-08-24T21:44:16.968 INFO 128.135.4.118 <- True
+2023-08-24T21:44:22.166 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=3&ClientID=48524
+2023-08-24T21:44:22.167 INFO 128.135.4.118 <- False
+2023-08-24T21:44:22.228 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=4&ClientID=48524
+2023-08-24T21:44:22.229 INFO 128.135.4.118 <- False
+2023-08-24T21:44:22.292 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=5&ClientID=48524
+2023-08-24T21:44:22.293 INFO 128.135.4.118 <- False
+2023-08-24T21:44:25.862 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=6&ClientID=48524
+2023-08-24T21:44:25.863 INFO 128.135.4.118 <- False
+2023-08-24T21:44:25.927 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=7&ClientID=48524
+2023-08-24T21:44:25.927 INFO 128.135.4.118 <- False
+2023-08-24T21:44:25.994 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=8&ClientID=48524
+2023-08-24T21:44:25.995 INFO 128.135.4.118 <- False
+2023-08-24T21:44:29.496 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=9&ClientID=48524
+2023-08-24T21:44:29.497 INFO 128.135.4.118 <- False
+2023-08-24T21:44:29.559 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=10&ClientID=48524
+2023-08-24T21:44:29.560 INFO 128.135.4.118 <- False
+2023-08-24T21:44:29.637 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=11&ClientID=48524
+2023-08-24T21:44:29.638 INFO 128.135.4.118 <- False
+2023-08-24T21:44:36.703 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=12&ClientID=48524
+2023-08-24T21:44:36.704 INFO 128.135.4.118 <- False
+2023-08-24T21:44:36.763 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=13&ClientID=48524
+2023-08-24T21:44:36.763 INFO 128.135.4.118 <- False
+2023-08-24T21:44:36.827 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=14&ClientID=48524
+2023-08-24T21:44:36.828 INFO 128.135.4.118 <- False
+2023-08-24T21:44:40.383 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=15&ClientID=48524
+2023-08-24T21:44:40.384 INFO 128.135.4.118 <- False
+2023-08-24T21:44:40.445 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=16&ClientID=48524
+2023-08-24T21:44:40.446 INFO 128.135.4.118 <- False
+2023-08-24T21:44:40.512 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=17&ClientID=48524
+2023-08-24T21:44:40.512 INFO 128.135.4.118 <- False
+2023-08-24T21:44:44.148 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=18&ClientID=48524
+2023-08-24T21:44:44.149 INFO 128.135.4.118 <- False
+2023-08-24T21:44:44.211 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=19&ClientID=48524
+2023-08-24T21:44:44.211 INFO 128.135.4.118 <- False
+2023-08-24T21:44:44.274 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=20&ClientID=48524
+2023-08-24T21:44:44.275 INFO 128.135.4.118 <- False
+2023-08-24T21:44:51.414 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=21&ClientID=48524
+2023-08-24T21:44:51.415 INFO 128.135.4.118 <- False
+2023-08-24T21:44:51.438 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=22&ClientID=48524
+2023-08-24T21:44:51.438 INFO 128.135.4.118 <- False
+2023-08-24T21:44:51.465 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=23&ClientID=48524
+2023-08-24T21:44:51.465 INFO 128.135.4.118 <- False
+2023-08-24T21:44:51.532 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=24&ClientID=48524
+2023-08-24T21:44:51.532 INFO 128.135.4.118 <- False
+2023-08-24T21:44:55.203 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=25&ClientID=48524
+2023-08-24T21:44:55.204 INFO 128.135.4.118 <- False
+2023-08-24T21:44:55.218 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=26&ClientID=48524
+2023-08-24T21:44:55.218 INFO 128.135.4.118 <- False
+2023-08-24T21:44:55.240 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=27&ClientID=48524
+2023-08-24T21:44:55.240 INFO 128.135.4.118 <- False
+2023-08-24T21:44:55.294 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=28&ClientID=48524
+2023-08-24T21:44:55.294 INFO 128.135.4.118 <- False
+2023-08-24T21:44:55.357 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=29&ClientID=48524
+2023-08-24T21:44:55.358 INFO 128.135.4.118 <- False
+2023-08-24T21:44:58.978 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=30&ClientID=48524
+2023-08-24T21:44:58.978 INFO 128.135.4.118 <- False
+2023-08-24T21:44:59.002 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=31&ClientID=48524
+2023-08-24T21:44:59.003 INFO 128.135.4.118 <- False
+2023-08-24T21:44:59.074 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=32&ClientID=48524
+2023-08-24T21:44:59.075 INFO 128.135.4.118 <- False
+2023-08-24T21:44:59.136 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=33&ClientID=48524
+2023-08-24T21:44:59.137 INFO 128.135.4.118 <- False
+2023-08-24T21:45:06.195 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=34&ClientID=48524
+2023-08-24T21:45:06.195 INFO 128.135.4.118 <- False
+2023-08-24T21:45:06.260 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=35&ClientID=48524
+2023-08-24T21:45:06.260 INFO 128.135.4.118 <- False
+2023-08-24T21:45:06.323 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=36&ClientID=48524
+2023-08-24T21:45:06.323 INFO 128.135.4.118 <- False
+2023-08-24T21:45:09.950 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=37&ClientID=48524
+2023-08-24T21:45:09.950 INFO 128.135.4.118 <- False
+2023-08-24T21:45:09.965 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=38&ClientID=48524
+2023-08-24T21:45:09.965 INFO 128.135.4.118 <- False
+2023-08-24T21:45:10.020 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=39&ClientID=48524
+2023-08-24T21:45:10.021 INFO 128.135.4.118 <- False
+2023-08-24T21:45:10.077 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=40&ClientID=48524
+2023-08-24T21:45:10.078 INFO 128.135.4.118 <- False
+2023-08-24T21:45:13.738 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=41&ClientID=48524
+2023-08-24T21:45:13.739 INFO 128.135.4.118 <- False
+2023-08-24T21:45:13.749 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=42&ClientID=48524
+2023-08-24T21:45:13.750 INFO 128.135.4.118 <- False
+2023-08-24T21:45:13.780 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=43&ClientID=48524
+2023-08-24T21:45:13.780 INFO 128.135.4.118 <- False
+2023-08-24T21:45:15.173 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=44&ClientID=48524
+2023-08-24T21:45:15.174 INFO 128.135.4.118 <- False
+2023-08-24T21:45:15.191 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=45&ClientID=48524
+2023-08-24T21:45:15.191 INFO 128.135.4.118 <- False
+2023-08-24T21:45:15.239 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=46&ClientID=48524
+2023-08-24T21:45:15.240 INFO 128.135.4.118 <- False
+2023-08-24T21:45:15.302 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=47&ClientID=48524
+2023-08-24T21:45:15.302 INFO 128.135.4.118 <- False
+2023-08-24T21:45:16.094 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=48&ClientID=48524
+2023-08-24T21:45:16.095 INFO 128.135.4.118 <- False
+2023-08-24T21:45:16.114 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=49&ClientID=48524
+2023-08-24T21:45:16.115 INFO 128.135.4.118 <- False
+2023-08-24T21:45:16.178 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=50&ClientID=48524
+2023-08-24T21:45:16.178 INFO 128.135.4.118 <- False
+2023-08-24T21:45:16.242 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=51&ClientID=48524
+2023-08-24T21:45:16.243 INFO 128.135.4.118 <- False
+2023-08-24T21:45:17.015 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=52&ClientID=48524
+2023-08-24T21:45:17.016 INFO 128.135.4.118 <- False
+2023-08-24T21:45:17.029 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=53&ClientID=48524
+2023-08-24T21:45:17.029 INFO 128.135.4.118 <- False
+2023-08-24T21:45:17.052 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=54&ClientID=48524
+2023-08-24T21:45:17.052 INFO 128.135.4.118 <- False
+2023-08-24T21:45:17.121 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=55&ClientID=48524
+2023-08-24T21:45:17.121 INFO 128.135.4.118 <- False
+2023-08-24T21:45:18.550 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=56&ClientID=48524
+2023-08-24T21:45:18.551 INFO 128.135.4.118 <- False
+2023-08-24T21:45:18.564 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=57&ClientID=48524
+2023-08-24T21:45:18.565 INFO 128.135.4.118 <- False
+2023-08-24T21:45:18.617 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=58&ClientID=48524
+2023-08-24T21:45:18.618 INFO 128.135.4.118 <- False
+2023-08-24T21:45:18.675 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=59&ClientID=48524
+2023-08-24T21:45:18.676 INFO 128.135.4.118 <- False
+2023-08-24T21:45:19.472 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=60&ClientID=48524
+2023-08-24T21:45:19.472 INFO 128.135.4.118 <- False
+2023-08-24T21:45:19.491 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=61&ClientID=48524
+2023-08-24T21:45:19.491 INFO 128.135.4.118 <- False
+2023-08-24T21:45:19.556 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=62&ClientID=48524
+2023-08-24T21:45:19.556 INFO 128.135.4.118 <- False
+2023-08-24T21:45:19.618 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=63&ClientID=48524
+2023-08-24T21:45:19.619 INFO 128.135.4.118 <- False
+2023-08-24T21:45:20.236 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=64&ClientID=48524
+2023-08-24T21:45:20.237 INFO 128.135.4.118 <- False
+2023-08-24T21:45:20.299 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=65&ClientID=48524
+2023-08-24T21:45:20.300 INFO 128.135.4.118 <- False
+2023-08-24T21:45:20.364 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=66&ClientID=48524
+2023-08-24T21:45:20.365 INFO 128.135.4.118 <- False
+2023-08-24T21:45:21.761 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=67&ClientID=48524
+2023-08-24T21:45:21.762 INFO 128.135.4.118 <- False
+2023-08-24T21:45:21.823 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=68&ClientID=48524
+2023-08-24T21:45:21.823 INFO 128.135.4.118 <- False
+2023-08-24T21:45:21.886 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=69&ClientID=48524
+2023-08-24T21:45:21.886 INFO 128.135.4.118 <- False
+2023-08-24T21:45:22.650 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=70&ClientID=48524
+2023-08-24T21:45:22.651 INFO 128.135.4.118 <- False
+2023-08-24T21:45:22.693 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=71&ClientID=48524
+2023-08-24T21:45:22.693 INFO 128.135.4.118 <- False
+2023-08-24T21:45:22.757 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=72&ClientID=48524
+2023-08-24T21:45:22.758 INFO 128.135.4.118 <- False
+2023-08-24T21:45:23.508 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=73&ClientID=48524
+2023-08-24T21:45:23.509 INFO 128.135.4.118 <- False
+2023-08-24T21:45:23.570 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=74&ClientID=48524
+2023-08-24T21:45:23.571 INFO 128.135.4.118 <- False
+2023-08-24T21:45:23.636 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=75&ClientID=48524
+2023-08-24T21:45:23.636 INFO 128.135.4.118 <- False
+2023-08-24T21:45:24.945 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=76&ClientID=48524
+2023-08-24T21:45:24.946 INFO 128.135.4.118 <- False
+2023-08-24T21:45:25.009 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=77&ClientID=48524
+2023-08-24T21:45:25.010 INFO 128.135.4.118 <- False
+2023-08-24T21:45:25.067 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=78&ClientID=48524
+2023-08-24T21:45:25.067 INFO 128.135.4.118 <- False
+2023-08-24T21:45:25.783 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=79&ClientID=48524
+2023-08-24T21:45:25.784 INFO 128.135.4.118 <- False
+2023-08-24T21:45:25.833 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=80&ClientID=48524
+2023-08-24T21:45:25.833 INFO 128.135.4.118 <- False
+2023-08-24T21:45:25.902 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=81&ClientID=48524
+2023-08-24T21:45:25.902 INFO 128.135.4.118 <- False
+2023-08-24T21:45:30.118 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=82&ClientID=48524
+2023-08-24T21:45:30.119 INFO 128.135.4.118 <- False
+2023-08-24T21:45:30.182 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=83&ClientID=48524
+2023-08-24T21:45:30.182 INFO 128.135.4.118 <- False
+2023-08-24T21:45:30.249 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=84&ClientID=48524
+2023-08-24T21:45:30.250 INFO 128.135.4.118 <- False
+2023-08-24T21:45:32.047 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=85&ClientID=48524
+2023-08-24T21:45:32.047 INFO 128.135.4.118 <- False
+2023-08-24T21:45:32.119 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=86&ClientID=48524
+2023-08-24T21:45:32.120 INFO 128.135.4.118 <- False
+2023-08-24T21:45:32.174 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=87&ClientID=48524
+2023-08-24T21:45:32.174 INFO 128.135.4.118 <- False
+2023-08-24T21:45:34.116 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=88&ClientID=48524
+2023-08-24T21:45:34.116 INFO 128.135.4.118 <- False
+2023-08-24T21:45:34.127 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=89&ClientID=48524
+2023-08-24T21:45:34.128 INFO 128.135.4.118 <- False
+2023-08-24T21:45:34.206 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=90&ClientID=48524
+2023-08-24T21:45:34.206 INFO 128.135.4.118 <- False
+2023-08-24T21:45:34.268 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=91&ClientID=48524
+2023-08-24T21:45:34.268 INFO 128.135.4.118 <- False
+2023-08-24T21:45:37.903 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=92&ClientID=48524
+2023-08-24T21:45:37.904 INFO 128.135.4.118 <- False
+2023-08-24T21:45:37.924 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=93&ClientID=48524
+2023-08-24T21:45:37.924 INFO 128.135.4.118 <- False
+2023-08-24T21:45:37.989 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=94&ClientID=48524
+2023-08-24T21:45:37.989 INFO 128.135.4.118 <- False
+2023-08-24T21:45:38.054 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=95&ClientID=48524
+2023-08-24T21:45:38.055 INFO 128.135.4.118 <- False
+2023-08-24T21:45:39.952 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=96&ClientID=48524
+2023-08-24T21:45:39.952 INFO 128.135.4.118 <- False
+2023-08-24T21:45:39.987 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=97&ClientID=48524
+2023-08-24T21:45:39.987 INFO 128.135.4.118 <- False
+2023-08-24T21:45:40.052 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=98&ClientID=48524
+2023-08-24T21:45:40.053 INFO 128.135.4.118 <- False
+2023-08-24T21:45:42.003 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=99&ClientID=48524
+2023-08-24T21:45:42.004 INFO 128.135.4.118 <- False
+2023-08-24T21:45:42.017 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=100&ClientID=48524
+2023-08-24T21:45:42.018 INFO 128.135.4.118 <- False
+2023-08-24T21:45:42.030 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=101&ClientID=48524
+2023-08-24T21:45:42.031 INFO 128.135.4.118 <- False
+2023-08-24T21:45:42.082 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=102&ClientID=48524
+2023-08-24T21:45:42.082 INFO 128.135.4.118 <- False
+2023-08-24T21:45:42.146 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=103&ClientID=48524
+2023-08-24T21:45:42.146 INFO 128.135.4.118 <- False
+2023-08-24T21:45:45.892 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=104&ClientID=48524
+2023-08-24T21:45:45.893 INFO 128.135.4.118 <- False
+2023-08-24T21:45:45.909 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=105&ClientID=48524
+2023-08-24T21:45:45.909 INFO 128.135.4.118 <- False
+2023-08-24T21:45:45.982 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=106&ClientID=48524
+2023-08-24T21:45:45.982 INFO 128.135.4.118 <- False
+2023-08-24T21:45:46.047 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=107&ClientID=48524
+2023-08-24T21:45:46.048 INFO 128.135.4.118 <- False
+2023-08-24T21:45:53.821 INFO 128.135.4.118 -> PUT /api/v1/telescope/0/pulseguide
+2023-08-24T21:45:53.824 INFO 128.135.4.118 -> {'ClientTransactionID': '108', 'ClientID': '48524', 'Direction': '2', 'Duration': '1000'}
+2023-08-24T21:45:53.824 INFO Pulse guide: E
+2023-08-24T21:45:53.826 INFO Pulse guide: 1000 ms
+2023-08-24T21:45:54.865 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=109&ClientID=48524
+2023-08-24T21:45:54.865 INFO 128.135.4.118 <- False
+2023-08-24T21:45:54.876 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=110&ClientID=48524
+2023-08-24T21:45:54.876 INFO 128.135.4.118 <- False
+2023-08-24T21:45:54.890 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=111&ClientID=48524
+2023-08-24T21:45:54.890 INFO 128.135.4.118 <- False
+2023-08-24T21:45:54.939 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=112&ClientID=48524
+2023-08-24T21:45:54.939 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.002 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=113&ClientID=48524
+2023-08-24T21:45:55.002 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.063 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=114&ClientID=48524
+2023-08-24T21:45:55.064 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.127 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=115&ClientID=48524
+2023-08-24T21:45:55.128 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.188 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=116&ClientID=48524
+2023-08-24T21:45:55.189 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.257 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=117&ClientID=48524
+2023-08-24T21:45:55.257 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.315 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=118&ClientID=48524
+2023-08-24T21:45:55.315 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.376 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=119&ClientID=48524
+2023-08-24T21:45:55.377 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.439 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=120&ClientID=48524
+2023-08-24T21:45:55.440 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.504 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=121&ClientID=48524
+2023-08-24T21:45:55.504 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.565 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=122&ClientID=48524
+2023-08-24T21:45:55.566 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.627 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=123&ClientID=48524
+2023-08-24T21:45:55.627 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.689 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=124&ClientID=48524
+2023-08-24T21:45:55.689 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.754 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=125&ClientID=48524
+2023-08-24T21:45:55.754 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.815 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=126&ClientID=48524
+2023-08-24T21:45:55.815 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.879 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=127&ClientID=48524
+2023-08-24T21:45:55.879 INFO 128.135.4.118 <- False
+2023-08-24T21:45:55.943 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=128&ClientID=48524
+2023-08-24T21:45:55.943 INFO 128.135.4.118 <- False
+2023-08-24T21:45:56.003 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=129&ClientID=48524
+2023-08-24T21:45:56.003 INFO 128.135.4.118 <- False
+2023-08-24T21:45:56.077 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=130&ClientID=48524
+2023-08-24T21:45:56.078 INFO 128.135.4.118 <- False
+2023-08-24T21:45:56.128 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=131&ClientID=48524
+2023-08-24T21:45:56.128 INFO 128.135.4.118 <- False
+2023-08-24T21:45:56.190 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=132&ClientID=48524
+2023-08-24T21:45:56.191 INFO 128.135.4.118 <- False
+2023-08-24T21:45:56.251 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=133&ClientID=48524
+2023-08-24T21:45:56.252 INFO 128.135.4.118 <- False
+2023-08-24T21:45:56.317 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=134&ClientID=48524
+2023-08-24T21:45:56.318 INFO 128.135.4.118 <- False
+2023-08-24T21:45:56.382 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=135&ClientID=48524
+2023-08-24T21:45:56.383 INFO 128.135.4.118 <- False
+2023-08-24T21:46:06.326 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=136&ClientID=48524
+2023-08-24T21:46:06.326 INFO 128.135.4.118 <- False
+2023-08-24T21:46:06.391 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=137&ClientID=48524
+2023-08-24T21:46:06.392 INFO 128.135.4.118 <- False
+2023-08-24T21:46:06.455 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=138&ClientID=48524
+2023-08-24T21:46:06.456 INFO 128.135.4.118 <- False
+2023-08-24T21:46:07.190 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=139&ClientID=48524
+2023-08-24T21:46:07.191 INFO 128.135.4.118 <- False
+2023-08-24T21:46:07.220 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=140&ClientID=48524
+2023-08-24T21:46:07.221 INFO 128.135.4.118 <- False
+2023-08-24T21:46:07.288 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=141&ClientID=48524
+2023-08-24T21:46:07.288 INFO 128.135.4.118 <- False
+2023-08-24T21:46:07.350 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=142&ClientID=48524
+2023-08-24T21:46:07.351 INFO 128.135.4.118 <- False
+2023-08-24T21:46:08.112 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=143&ClientID=48524
+2023-08-24T21:46:08.112 INFO 128.135.4.118 <- False
+2023-08-24T21:46:08.161 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=144&ClientID=48524
+2023-08-24T21:46:08.161 INFO 128.135.4.118 <- False
+2023-08-24T21:46:08.222 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=145&ClientID=48524
+2023-08-24T21:46:08.222 INFO 128.135.4.118 <- False
+2023-08-24T21:48:02.311 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=146&ClientID=48524
+2023-08-24T21:48:02.312 INFO 128.135.4.118 <- False
+2023-08-24T21:48:02.331 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=147&ClientID=48524
+2023-08-24T21:48:02.331 INFO 128.135.4.118 <- False
+2023-08-24T21:48:02.350 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=148&ClientID=48524
+2023-08-24T21:48:02.350 INFO 128.135.4.118 <- False
+2023-08-24T21:48:02.359 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=149&ClientID=48524
+2023-08-24T21:48:02.359 INFO 128.135.4.118 <- False
+2023-08-24T21:48:02.372 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=150&ClientID=48524
+2023-08-24T21:48:02.372 INFO 128.135.4.118 <- False
+2023-08-24T21:48:02.383 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=151&ClientID=48524
+2023-08-24T21:48:02.384 INFO 128.135.4.118 <- False
+2023-08-24T21:48:02.409 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=152&ClientID=48524
+2023-08-24T21:48:02.409 INFO 128.135.4.118 <- False
+2023-08-24T21:48:02.419 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=153&ClientID=48524
+2023-08-24T21:48:02.420 INFO 128.135.4.118 <- False
+2023-08-24T21:48:03.940 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=154&ClientID=48524
+2023-08-24T21:48:03.941 INFO 128.135.4.118 <- False
+2023-08-24T21:48:04.003 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=155&ClientID=48524
+2023-08-24T21:48:04.003 INFO 128.135.4.118 <- False
+2023-08-24T21:48:04.068 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=156&ClientID=48524
+2023-08-24T21:48:04.068 INFO 128.135.4.118 <- False
+2023-08-24T21:48:05.622 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=157&ClientID=48524
+2023-08-24T21:48:05.622 INFO 128.135.4.118 <- False
+2023-08-24T21:48:05.689 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=158&ClientID=48524
+2023-08-24T21:48:05.689 INFO 128.135.4.118 <- False
+2023-08-24T21:48:05.751 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=159&ClientID=48524
+2023-08-24T21:48:05.752 INFO 128.135.4.118 <- False
+2023-08-24T21:48:08.888 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=160&ClientID=48524
+2023-08-24T21:48:08.888 INFO 128.135.4.118 <- False
+2023-08-24T21:48:08.951 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=161&ClientID=48524
+2023-08-24T21:48:08.952 INFO 128.135.4.118 <- False
+2023-08-24T21:48:09.016 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=162&ClientID=48524
+2023-08-24T21:48:09.016 INFO 128.135.4.118 <- False
+2023-08-24T21:48:10.600 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=163&ClientID=48524
+2023-08-24T21:48:10.600 INFO 128.135.4.118 <- False
+2023-08-24T21:48:10.654 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=164&ClientID=48524
+2023-08-24T21:48:10.654 INFO 128.135.4.118 <- False
+2023-08-24T21:48:10.716 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=165&ClientID=48524
+2023-08-24T21:48:10.716 INFO 128.135.4.118 <- False
+2023-08-24T21:48:12.308 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=166&ClientID=48524
+2023-08-24T21:48:12.308 INFO 128.135.4.118 <- False
+2023-08-24T21:48:12.352 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=167&ClientID=48524
+2023-08-24T21:48:12.352 INFO 128.135.4.118 <- False
+2023-08-24T21:48:12.417 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=168&ClientID=48524
+2023-08-24T21:48:12.417 INFO 128.135.4.118 <- False
+2023-08-24T21:48:15.620 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=169&ClientID=48524
+2023-08-24T21:48:15.620 INFO 128.135.4.118 <- False
+2023-08-24T21:48:15.634 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=170&ClientID=48524
+2023-08-24T21:48:15.634 INFO 128.135.4.118 <- False
+2023-08-24T21:48:15.655 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=171&ClientID=48524
+2023-08-24T21:48:15.656 INFO 128.135.4.118 <- False
+2023-08-24T21:48:15.710 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=172&ClientID=48524
+2023-08-24T21:48:15.711 INFO 128.135.4.118 <- False
+2023-08-24T21:48:15.772 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=173&ClientID=48524
+2023-08-24T21:48:15.773 INFO 128.135.4.118 <- False
+2023-08-24T21:48:17.333 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=174&ClientID=48524
+2023-08-24T21:48:17.333 INFO 128.135.4.118 <- False
+2023-08-24T21:48:17.397 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=175&ClientID=48524
+2023-08-24T21:48:17.398 INFO 128.135.4.118 <- False
+2023-08-24T21:48:17.461 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=176&ClientID=48524
+2023-08-24T21:48:17.462 INFO 128.135.4.118 <- False
+2023-08-24T21:48:18.955 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=177&ClientID=48524
+2023-08-24T21:48:18.956 INFO 128.135.4.118 <- False
+2023-08-24T21:48:19.021 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=178&ClientID=48524
+2023-08-24T21:48:19.021 INFO 128.135.4.118 <- False
+2023-08-24T21:48:19.083 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=179&ClientID=48524
+2023-08-24T21:48:19.083 INFO 128.135.4.118 <- False
+2023-08-24T21:48:28.322 INFO 128.135.4.118 -> PUT /api/v1/telescope/0/connected
+2023-08-24T21:48:28.324 INFO 128.135.4.118 -> {'ClientTransactionID': '180', 'ClientID': '48524', 'Connected': 'False'}
+2023-08-24T21:48:28.324 INFO [disconnected]
+2023-08-24T21:48:33.717 INFO 128.135.4.118 -> PUT /api/v1/telescope/0/connected
+2023-08-24T21:48:33.719 INFO 128.135.4.118 -> {'ClientTransactionID': '1', 'ClientID': '44849', 'Connected': 'True'}
+2023-08-24T21:48:33.719 INFO [connected]
+2023-08-24T21:48:33.768 INFO 128.135.4.118 -> GET /api/v1/telescope/0/canpulseguide?ClientTransactionID=2&ClientID=44849
+2023-08-24T21:48:33.768 INFO 128.135.4.118 <- True
+2023-08-24T21:49:05.394 INFO 128.135.4.118 -> PUT /api/v1/telescope/0/connected
+2023-08-24T21:49:05.396 INFO 128.135.4.118 -> {'ClientTransactionID': '3', 'ClientID': '44849', 'Connected': 'False'}
+2023-08-24T21:49:05.397 INFO [disconnected]
+2023-08-24T22:05:57.648 INFO 128.135.4.118 -> PUT /api/v1/telescope/0/connected
+2023-08-24T22:05:57.650 INFO 128.135.4.118 -> {'ClientTransactionID': '1', 'ClientID': '13318', 'Connected': 'True'}
+2023-08-24T22:05:57.650 INFO [connected]
+2023-08-24T22:05:57.700 INFO 128.135.4.118 -> GET /api/v1/telescope/0/canpulseguide?ClientTransactionID=2&ClientID=13318
+2023-08-24T22:05:57.700 INFO 128.135.4.118 <- True
+2023-08-24T22:08:24.162 INFO 128.135.4.118 -> PUT /api/v1/telescope/0/pulseguide
+2023-08-24T22:08:24.164 INFO 128.135.4.118 -> {'ClientTransactionID': '3', 'ClientID': '13318', 'Direction': '1', 'Duration': '1000'}
+2023-08-24T22:08:24.164 INFO Pulse guide: S
+2023-08-24T22:08:24.165 INFO Pulse guide: 1000 ms
+2023-08-24T22:08:25.195 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=4&ClientID=13318
+2023-08-24T22:08:25.195 INFO 128.135.4.118 <- False
+2023-08-24T22:08:25.253 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=5&ClientID=13318
+2023-08-24T22:08:25.253 INFO 128.135.4.118 <- False
+2023-08-24T22:08:25.307 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=6&ClientID=13318
+2023-08-24T22:08:25.307 INFO 128.135.4.118 <- False
+2023-08-24T22:08:25.375 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=7&ClientID=13318
+2023-08-24T22:08:25.376 INFO 128.135.4.118 <- False
+2023-08-24T22:08:25.510 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=8&ClientID=13318
+2023-08-24T22:08:25.510 INFO 128.135.4.118 <- False
+2023-08-24T22:08:25.574 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=9&ClientID=13318
+2023-08-24T22:08:25.574 INFO 128.135.4.118 <- False
+2023-08-24T22:08:25.661 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=10&ClientID=13318
+2023-08-24T22:08:25.661 INFO 128.135.4.118 <- False
+2023-08-24T22:08:25.682 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=11&ClientID=13318
+2023-08-24T22:08:25.682 INFO 128.135.4.118 <- False
+2023-08-24T22:08:25.746 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=12&ClientID=13318
+2023-08-24T22:08:25.747 INFO 128.135.4.118 <- False
+2023-08-24T22:08:25.809 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=13&ClientID=13318
+2023-08-24T22:08:25.810 INFO 128.135.4.118 <- False
+2023-08-24T22:08:25.869 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=14&ClientID=13318
+2023-08-24T22:08:25.870 INFO 128.135.4.118 <- False
+2023-08-24T22:08:25.933 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=15&ClientID=13318
+2023-08-24T22:08:25.934 INFO 128.135.4.118 <- False
+2023-08-24T22:08:25.997 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=16&ClientID=13318
+2023-08-24T22:08:25.997 INFO 128.135.4.118 <- False
+2023-08-24T22:08:26.058 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=17&ClientID=13318
+2023-08-24T22:08:26.058 INFO 128.135.4.118 <- False
+2023-08-24T22:08:26.121 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=18&ClientID=13318
+2023-08-24T22:08:26.121 INFO 128.135.4.118 <- False
+2023-08-24T22:08:26.197 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=19&ClientID=13318
+2023-08-24T22:08:26.198 INFO 128.135.4.118 <- False
+2023-08-24T22:08:26.261 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=20&ClientID=13318
+2023-08-24T22:08:26.261 INFO 128.135.4.118 <- False
+2023-08-24T22:08:26.325 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=21&ClientID=13318
+2023-08-24T22:08:26.325 INFO 128.135.4.118 <- False
+2023-08-24T22:08:26.387 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=22&ClientID=13318
+2023-08-24T22:08:26.387 INFO 128.135.4.118 <- False
+2023-08-24T22:08:26.446 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=23&ClientID=13318
+2023-08-24T22:08:26.447 INFO 128.135.4.118 <- False
+2023-08-24T22:08:26.511 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=24&ClientID=13318
+2023-08-24T22:08:26.512 INFO 128.135.4.118 <- False
+2023-08-24T22:08:26.647 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=25&ClientID=13318
+2023-08-24T22:08:26.648 INFO 128.135.4.118 <- False
+2023-08-24T22:08:26.698 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=26&ClientID=13318
+2023-08-24T22:08:26.698 INFO 128.135.4.118 <- False
+2023-08-24T22:08:26.974 INFO 128.135.4.118 -> PUT /api/v1/telescope/0/pulseguide
+2023-08-24T22:08:26.977 INFO 128.135.4.118 -> {'ClientTransactionID': '27', 'ClientID': '13318', 'Direction': '1', 'Duration': '1000'}
+2023-08-24T22:08:26.977 INFO Pulse guide: S
+2023-08-24T22:08:26.977 INFO Pulse guide: 1000 ms
+2023-08-24T22:08:28.003 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=28&ClientID=13318
+2023-08-24T22:08:28.003 INFO 128.135.4.118 <- False
+2023-08-24T22:08:28.094 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=29&ClientID=13318
+2023-08-24T22:08:28.095 INFO 128.135.4.118 <- False
+2023-08-24T22:08:28.156 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=30&ClientID=13318
+2023-08-24T22:08:28.157 INFO 128.135.4.118 <- False
+2023-08-24T22:08:28.218 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=31&ClientID=13318
+2023-08-24T22:08:28.219 INFO 128.135.4.118 <- False
+2023-08-24T22:08:28.344 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=32&ClientID=13318
+2023-08-24T22:08:28.344 INFO 128.135.4.118 <- False
+2023-08-24T22:08:28.407 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=33&ClientID=13318
+2023-08-24T22:08:28.407 INFO 128.135.4.118 <- False
+2023-08-24T22:08:28.595 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=34&ClientID=13318
+2023-08-24T22:08:28.595 INFO 128.135.4.118 <- False
+2023-08-24T22:08:28.656 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=35&ClientID=13318
+2023-08-24T22:08:28.656 INFO 128.135.4.118 <- False
+2023-08-24T22:08:28.781 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=36&ClientID=13318
+2023-08-24T22:08:28.782 INFO 128.135.4.118 <- False
+2023-08-24T22:08:28.843 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=37&ClientID=13318
+2023-08-24T22:08:28.843 INFO 128.135.4.118 <- False
+2023-08-24T22:08:28.971 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=38&ClientID=13318
+2023-08-24T22:08:28.972 INFO 128.135.4.118 <- False
+2023-08-24T22:08:29.032 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=39&ClientID=13318
+2023-08-24T22:08:29.033 INFO 128.135.4.118 <- False
+2023-08-24T22:08:29.157 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=40&ClientID=13318
+2023-08-24T22:08:29.157 INFO 128.135.4.118 <- False
+2023-08-24T22:08:29.219 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=41&ClientID=13318
+2023-08-24T22:08:29.220 INFO 128.135.4.118 <- False
+2023-08-24T22:08:29.343 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=42&ClientID=13318
+2023-08-24T22:08:29.344 INFO 128.135.4.118 <- False
+2023-08-24T22:08:29.409 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=43&ClientID=13318
+2023-08-24T22:08:29.409 INFO 128.135.4.118 <- False
+2023-08-24T22:08:29.469 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=44&ClientID=13318
+2023-08-24T22:08:29.470 INFO 128.135.4.118 <- False
+2023-08-24T22:08:29.532 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=45&ClientID=13318
+2023-08-24T22:08:29.532 INFO 128.135.4.118 <- False
+2023-08-24T22:08:29.783 INFO 128.135.4.118 -> PUT /api/v1/telescope/0/pulseguide
+2023-08-24T22:08:29.786 INFO 128.135.4.118 -> {'ClientTransactionID': '46', 'ClientID': '13318', 'Direction': '1', 'Duration': '1000'}
+2023-08-24T22:08:29.787 INFO Pulse guide: S
+2023-08-24T22:08:29.788 INFO Pulse guide: 1000 ms
+2023-08-24T22:08:30.819 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=47&ClientID=13318
+2023-08-24T22:08:30.819 INFO 128.135.4.118 <- False
+2023-08-24T22:08:30.967 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=48&ClientID=13318
+2023-08-24T22:08:30.968 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.029 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=49&ClientID=13318
+2023-08-24T22:08:31.029 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.091 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=50&ClientID=13318
+2023-08-24T22:08:31.091 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.155 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=51&ClientID=13318
+2023-08-24T22:08:31.155 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.216 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=52&ClientID=13318
+2023-08-24T22:08:31.217 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.277 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=53&ClientID=13318
+2023-08-24T22:08:31.278 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.405 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=54&ClientID=13318
+2023-08-24T22:08:31.405 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.465 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=55&ClientID=13318
+2023-08-24T22:08:31.466 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.590 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=56&ClientID=13318
+2023-08-24T22:08:31.591 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.655 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=57&ClientID=13318
+2023-08-24T22:08:31.655 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.757 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=58&ClientID=13318
+2023-08-24T22:08:31.758 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.778 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=59&ClientID=13318
+2023-08-24T22:08:31.779 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.841 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=60&ClientID=13318
+2023-08-24T22:08:31.841 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.905 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=61&ClientID=13318
+2023-08-24T22:08:31.905 INFO 128.135.4.118 <- False
+2023-08-24T22:08:31.966 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=62&ClientID=13318
+2023-08-24T22:08:31.966 INFO 128.135.4.118 <- False
+2023-08-24T22:08:32.031 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=63&ClientID=13318
+2023-08-24T22:08:32.031 INFO 128.135.4.118 <- False
+2023-08-24T22:08:32.092 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=64&ClientID=13318
+2023-08-24T22:08:32.092 INFO 128.135.4.118 <- False
+2023-08-24T22:08:32.155 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=65&ClientID=13318
+2023-08-24T22:08:32.155 INFO 128.135.4.118 <- False
+2023-08-24T22:08:32.217 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=66&ClientID=13318
+2023-08-24T22:08:32.217 INFO 128.135.4.118 <- False
+2023-08-24T22:08:32.278 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=67&ClientID=13318
+2023-08-24T22:08:32.278 INFO 128.135.4.118 <- False
+2023-08-24T22:08:32.405 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=68&ClientID=13318
+2023-08-24T22:08:32.405 INFO 128.135.4.118 <- False
+2023-08-24T22:08:32.762 INFO 128.135.4.118 -> PUT /api/v1/telescope/0/pulseguide
+2023-08-24T22:08:32.764 INFO 128.135.4.118 -> {'ClientTransactionID': '69', 'ClientID': '13318', 'Direction': '1', 'Duration': '1000'}
+2023-08-24T22:08:32.765 INFO Pulse guide: S
+2023-08-24T22:08:32.765 INFO Pulse guide: 1000 ms
+2023-08-24T22:08:33.796 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=70&ClientID=13318
+2023-08-24T22:08:33.797 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.808 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=71&ClientID=13318
+2023-08-24T22:08:33.808 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.824 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=72&ClientID=13318
+2023-08-24T22:08:33.825 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.844 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=73&ClientID=13318
+2023-08-24T22:08:33.845 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.855 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=74&ClientID=13318
+2023-08-24T22:08:33.856 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.867 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=75&ClientID=13318
+2023-08-24T22:08:33.868 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.884 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=76&ClientID=13318
+2023-08-24T22:08:33.885 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.895 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=77&ClientID=13318
+2023-08-24T22:08:33.895 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.906 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=78&ClientID=13318
+2023-08-24T22:08:33.906 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.931 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=79&ClientID=13318
+2023-08-24T22:08:33.931 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.942 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=80&ClientID=13318
+2023-08-24T22:08:33.942 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.955 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=81&ClientID=13318
+2023-08-24T22:08:33.955 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.967 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=82&ClientID=13318
+2023-08-24T22:08:33.967 INFO 128.135.4.118 <- False
+2023-08-24T22:08:33.992 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=83&ClientID=13318
+2023-08-24T22:08:33.993 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.004 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=84&ClientID=13318
+2023-08-24T22:08:34.005 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.018 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=85&ClientID=13318
+2023-08-24T22:08:34.018 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.095 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=86&ClientID=13318
+2023-08-24T22:08:34.095 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.166 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=87&ClientID=13318
+2023-08-24T22:08:34.167 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.225 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=88&ClientID=13318
+2023-08-24T22:08:34.226 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.294 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=89&ClientID=13318
+2023-08-24T22:08:34.294 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.353 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=90&ClientID=13318
+2023-08-24T22:08:34.354 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.418 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=91&ClientID=13318
+2023-08-24T22:08:34.419 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.479 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=92&ClientID=13318
+2023-08-24T22:08:34.480 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.603 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=93&ClientID=13318
+2023-08-24T22:08:34.604 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.628 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=94&ClientID=13318
+2023-08-24T22:08:34.629 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.667 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=95&ClientID=13318
+2023-08-24T22:08:34.667 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.729 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=96&ClientID=13318
+2023-08-24T22:08:34.730 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.791 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=97&ClientID=13318
+2023-08-24T22:08:34.791 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.853 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=98&ClientID=13318
+2023-08-24T22:08:34.853 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.917 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=99&ClientID=13318
+2023-08-24T22:08:34.917 INFO 128.135.4.118 <- False
+2023-08-24T22:08:34.990 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=100&ClientID=13318
+2023-08-24T22:08:34.991 INFO 128.135.4.118 <- False
+2023-08-24T22:08:35.040 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=101&ClientID=13318
+2023-08-24T22:08:35.041 INFO 128.135.4.118 <- False
+2023-08-24T22:08:35.103 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=102&ClientID=13318
+2023-08-24T22:08:35.104 INFO 128.135.4.118 <- False
+2023-08-24T22:08:35.164 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=103&ClientID=13318
+2023-08-24T22:08:35.165 INFO 128.135.4.118 <- False
+2023-08-24T22:08:35.218 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=104&ClientID=13318
+2023-08-24T22:08:35.218 INFO 128.135.4.118 <- False
+2023-08-24T22:08:35.277 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=105&ClientID=13318
+2023-08-24T22:08:35.277 INFO 128.135.4.118 <- False
+2023-08-24T22:08:35.338 INFO 128.135.4.118 -> GET /api/v1/telescope/0/ispulseguiding?ClientTransactionID=106&ClientID=13318
+2023-08-24T22:08:35.338 INFO 128.135.4.118 <- False

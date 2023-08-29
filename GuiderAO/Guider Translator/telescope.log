@@ -1,0 +1,75 @@
+2023-08-24 16:17:33,014 - my_logger - INFO - [disconnected]
+2023-08-24 16:17:35,898 - my_logger - INFO - [connected]
+2023-08-24 16:24:53,329 - my_logger - INFO - Pulse guide: E
+2023-08-24 16:24:53,330 - my_logger - INFO - Pulse guide: 120 ms
+2023-08-24 16:27:42,606 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:27:42,607 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:27:44,855 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:27:44,856 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:27:47,212 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:27:47,213 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:27:49,361 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:27:49,361 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:27:51,128 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:27:51,129 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:27:53,357 - my_logger - INFO - Pulse guide: N
+2023-08-24 16:27:53,357 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:27:55,013 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:27:55,013 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:27:57,023 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:27:57,023 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:27:58,889 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:27:58,889 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:28:01,087 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:28:01,088 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:28:02,980 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:28:02,980 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:28:05,336 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:28:05,337 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:28:07,896 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:28:07,897 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:28:10,252 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:28:10,252 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:28:12,094 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:28:12,094 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:28:13,934 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:28:13,934 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:28:15,942 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:28:15,943 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:28:17,939 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:28:17,940 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:30:31,563 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:30:31,564 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:30:33,611 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:30:33,611 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:30:35,556 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:30:35,556 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:30:37,707 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:30:37,707 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:30:39,857 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:30:39,857 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:31:57,111 - my_logger - INFO - Pulse guide: S
+2023-08-24 16:31:57,111 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:32:46,145 - my_logger - INFO - Pulse guide: E
+2023-08-24 16:32:46,146 - my_logger - INFO - Pulse guide: 2000 ms
+2023-08-24 16:36:41,743 - my_logger - INFO - [disconnected]
+2023-08-24 16:36:58,714 - my_logger - INFO - [connected]
+2023-08-24 16:37:13,280 - my_logger - INFO - Pulse guide: E
+2023-08-24 16:37:13,280 - my_logger - INFO - Pulse guide: 1780 ms
+2023-08-24 16:37:16,657 - my_logger - INFO - Pulse guide: E
+2023-08-24 16:37:16,657 - my_logger - INFO - Pulse guide: 1690 ms
+2023-08-24 16:44:16,922 - my_logger - INFO - [connected]
+2023-08-24 16:45:53,824 - my_logger - INFO - Pulse guide: E
+2023-08-24 16:45:53,826 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 16:48:28,324 - my_logger - INFO - [disconnected]
+2023-08-24 16:48:33,719 - my_logger - INFO - [connected]
+2023-08-24 16:49:05,397 - my_logger - INFO - [disconnected]
+2023-08-24 17:05:57,650 - my_logger - INFO - [connected]
+2023-08-24 17:08:24,164 - my_logger - INFO - Pulse guide: S
+2023-08-24 17:08:24,165 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 17:08:26,977 - my_logger - INFO - Pulse guide: S
+2023-08-24 17:08:26,977 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 17:08:29,787 - my_logger - INFO - Pulse guide: S
+2023-08-24 17:08:29,788 - my_logger - INFO - Pulse guide: 1000 ms
+2023-08-24 17:08:32,765 - my_logger - INFO - Pulse guide: S
+2023-08-24 17:08:32,765 - my_logger - INFO - Pulse guide: 1000 ms

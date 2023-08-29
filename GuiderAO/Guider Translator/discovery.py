@@ -77,6 +77,7 @@ class DiscoveryResponder(Thread):
             self.rsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
         try:
             self.rsock.bind(self.device_address)
+            print(self.rsock)
         except:
             logger.error('Discovery responder: failure to bind receive socket')
             self.rsock.close()
@@ -87,6 +88,7 @@ class DiscoveryResponder(Thread):
         self.tsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  #share address
         try:
              self.tsock.bind((ADDR, 0))
+             print(self.tsock)
         except:
             logger.error('Discovery responder: failure to bind send socket')
             self.tsock.close()
