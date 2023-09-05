@@ -84,7 +84,7 @@ The client side ships with a config file by default, but it is not required.  Th
 should be in the same directory as the client code.  The config file has parameters grouped under different headings.
 
 #### Server
-- Address: The address of the serverm (used when the optional parameter server_address is left blank).  Default value if the config is missing is the loopback address (127.0.0.1).  If the server address is provided as an argument at run-time, the program will use that instead of the address in the config file.
+- Address: The address of the server (used when the optional parameter server_address is left blank).  Default value if the config is missing is the loopback address (127.0.0.1).  If the server address is provided as an argument at run-time, the program will use that instead of the address in the config file.
 - Port: The port the server is listening on (used when the optional parameter server_port is left blank).  Default value if the config is missing is 8080. If the server port is provided as an argument at run-time, the program will use that instead of the port in the config file.
 
 #### Other

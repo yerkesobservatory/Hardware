@@ -5,9 +5,12 @@ This package contains 2 separate software packages: a server/client implementati
 
 ## Table of Contents
 
-# MaxIm DL Scripting Interface
----
-## List of Commands
+## Guider Service
+
+The server and client are present in 2 separate folders in the GuiderService subfolder.  The server must be run on a Windows computer with MaxIm DL Pro involved (lower versions of MaxIm DL may work but the program has not been tested with them).  Additionally, the server requires at least Python 3.10 to run to take advantage of Python's match case functionality.
+
+### List of Commands
+
 | CmdName    | Parameters                      | Returns                   | Description               |
 |------------|---------------------------------|---------------------------|---------------------------|
 | set        | None                            | connected camera object   |                       
@@ -23,7 +26,7 @@ This package contains 2 separate software packages: a server/client implementati
 | quit       | None                            | None                      | 
 
 
-# MaxIm.CCDCamera.Status Output Codes
+### MaxIm.CCDCamera.Status Output Codes
 
 | EventCode(#) | EventTitle           |EventDescription                                      |
 |--------------|----------------------|------------------------------------------------------|
@@ -43,3 +46,7 @@ This package contains 2 separate software packages: a server/client implementati
 | 15           | csFilterWheelMoving  | Camera Control Window is waiting for filter wheel    |
 | 28           | csGuidingSuspended   | Autoguiding is suspended while main camera downloads |
 | 29           | csWaitingForDownload | Guide camera waiting for main camera to end download |
+
+## Guider Translator
+
+The Guider translator was written using the ASCOM alpyca in
