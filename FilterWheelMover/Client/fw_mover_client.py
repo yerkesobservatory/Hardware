@@ -8,23 +8,29 @@ Arguments:
     <command>: The command to be executed on the server.
         Available commands: get, set, quit, server shutdown
 
-    <number>: (Optional) Only applicable to the 'set' command.  Sets the filter wheel to the specified number.
+    <number>: (Optional) Only applicable to the 'set' command.
+        Sets the filter wheel to the specified number.
 
-    <server_address>: (Optional) The IP address or hostname of the server. Default is 10.150.150.84, which is 
-    the IP address of the intel NUC when this script was being written in the MIELab.
+    <server_address>: (Optional) The IP address or hostname of the server.
+        Default is 10.150.150.84, which is the IP address of the intel NUC
+        when this script was being written in the MIELab.
 
     <server_port>: (Optional) The port number of the server. Default is 12345.
 
 Commands:
     - get: Retrieves the filter wheel position from the server.
 
-    - filters: Prints the filter wheel positions and their corresponding filter names.
+    - filters: Prints the filter wheel positions and their corresponding filter
+               names.
 
-    - set <number>: Sets data on the server. Replace <number> with an actual number.
+    - set <number>: Sets data on the server. Replace <number> with an actual
+                    number.
 
-    - filter_list: Prints the filter wheel positions and their corresponding filter names.
+    - filter_list: Prints the filter wheel positions and their corresponding
+                   filter names.
 
-    - server_shutdown: Shuts down the server.  ONLY USE THIS IF YOU KNOW WHAT YOU'RE DOING.
+    - server_shutdown: Shuts down the server.
+                       ONLY USE THIS IF YOU KNOW WHAT YOU'RE DOING.
 """
 import logging
 import socket
@@ -57,9 +63,9 @@ if not found_config:
 
 def send_message(server_address, server_port, message):
     """
-    This method is responsible for taking a message and delivering it to the server.
-    It opens a socket with the given server and port, streams the message, waits for a response,
-    then closes the connection.  Uses TCP.
+    This method is responsible for taking a message and delivering it to the
+    server. It opens a socket with the given server and port, streams the
+    message, waits for a response, then closes the connection.  Uses TCP.
     Arguments:
     server_address:  IP address of the server
     server_port: Port of the server
@@ -78,14 +84,14 @@ def send_message(server_address, server_port, message):
 
         # Send the message to the server
         sock.sendall(message.encode('utf-8'))
-        logger.info(f"Sent command: {message}")  # Log the command
+        logger.info("Sent command: %s" % message)  # Log the command
 
         # Set the timeout to 1 minute
         sock.settimeout(60)
 
         # Receive and print the server's response
         response = sock.recv(1024)
-        logger.info(f"Server response: {response.decode('utf-8')}")
+        logger.info("Server response: %s" % response.decode('utf-8'))
 
         # Keep the program running until a response is received or timeout occurs
         while not response:
@@ -96,11 +102,17 @@ def send_message(server_address, server_port, message):
                 break
 
     except Exception as ex:
-        logger.error(f"Error: {str(ex)}")
+        logger.error("Error: %s" % str(ex))
 
     finally:
         # Close the socket
         sock.close()
+
+if len(sys.argv) < 3: 
+    # You need at least 3 arguments- fw_mover_client.py, set, and a number
+    logger.error("Too few arguments provided.")
+    logger.info("Usage: python fw_mover_client.py set <number> [<server_address>] [<server_port>]")
+    sys.exit(1)
 
 MESSAGE = sys.argv[1]
 NUMBER = None
@@ -108,11 +120,6 @@ NUMBER = None
 # Deal with the set command first, then all others due to the extra parameter
 if MESSAGE == "set":
 
-    if len(sys.argv) < 3: 
-        # You need at least 3 arguments- fw_mover_client.py, set, and a number
-        logger.error("Too few arguments provided.")
-        logger.info("Usage: python fw_mover_client.py set <number> [<server_address>] [<server_port>]")
-        sys.exit(1)
 
     try:
         NUMBER = int(sys.argv[2])
@@ -123,18 +130,21 @@ if MESSAGE == "set":
     
     if len(sys.argv) == 3:
         # Use the default server address and server port values
-        send_message(SERVER_ADDRESS, SERVER_PORT, f"{MESSAGE} {NUMBER}")
+        send_message(SERVER_ADDRESS, SERVER_PORT,
+                     "%s %s" % (MESSAGE, NUMBER))
 
     if len(sys.argv) == 4:
         # Use the default port values but change the address to what has been provided
         SERVER_ADDRESS = sys.argv[3]
-        send_message(SERVER_ADDRESS, SERVER_PORT, f"{MESSAGE} {NUMBER}")
+        send_message(SERVER_ADDRESS, SERVER_PORT,
+                     "%s %s" % (MESSAGE, NUMBER))
 
     if len(sys.argv) == 5:
         # Use the custom port and address values
         SERVER_ADDRESS = sys.argv[3]
         SERVER_PORT = int(sys.argv[4])
-        send_message(SERVER_ADDRESS, SERVER_PORT, f"{MESSAGE} {NUMBER}")
+        send_message(SERVER_ADDRESS, SERVER_PORT,
+                     "%s %s" % (MESSAGE, NUMBER))
 
     if len(sys.argv) > 5:
         logger.error("Too many arguments provided.")
