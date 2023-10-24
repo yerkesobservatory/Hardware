@@ -84,7 +84,7 @@ def send_message(server_address, server_port, message):
 
         # Send the message to the server
         sock.sendall(message.encode('utf-8'))
-        logger.info("Sent command: %s" % message)  # Log the command
+        logger.info("Sent command: %s" % message )  # Log the command
 
         # Set the timeout to 1 minute
         sock.settimeout(60)
@@ -108,13 +108,13 @@ def send_message(server_address, server_port, message):
         # Close the socket
         sock.close()
 
-if len(sys.argv) < 3: 
-    # You need at least 3 arguments- fw_mover_client.py, set, and a number
-    logger.error("Too few arguments provided.")
-    logger.info("Usage: python fw_mover_client.py set <number> [<server_address>] [<server_port>]")
+try:
+    MESSAGE = sys.argv[1]
+except IndexError:
+    logger.error("No command provided.")
+    logger.info("Usage: python fw_mover_client.py <command> [<number>] [<server_address>] [<server_port>]")
     sys.exit(1)
 
-MESSAGE = sys.argv[1]
 NUMBER = None
 
 # Deal with the set command first, then all others due to the extra parameter
@@ -150,6 +150,11 @@ if MESSAGE == "set":
         logger.error("Too many arguments provided.")
         logger.info("Usage: python fw_mover_client.py set <number> [<server_address>] [<server_port>]")
         sys.exit(1)
+
+# Deal with the help command
+elif MESSAGE == "help":
+    logger.info("Usage: python fw_mover_client.py <command> [<number>] [<server_address>] [<server_port>]")
+    logger.info("Available commands: get, set <number>, quit, server_shutdown")
     
 # Deal with all other commands
 else:
