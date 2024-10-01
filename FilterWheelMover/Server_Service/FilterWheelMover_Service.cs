@@ -397,7 +397,6 @@ partial class FilterWheelMoverServerService : ServiceBase
     {
         /*
          * Initializes socket to listen for commands.  Binds the socket to port #8080.
-         * TODO: Add config file where we can specify port and IP address.
          * Args:
          * None
          * Returns:

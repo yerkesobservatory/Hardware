@@ -19,7 +19,7 @@ Set up for the server is slightly involved as it requires us to create a Windows
 ```
 sc.exe create <service name> binPath= "<path to exe>" start= auto
 ```
-Ensure you give the full path name, ending in FWMover_Service.exe.  Close your command prompt after that.
+Ensure you give the full path name, ending in FWMover_Service.exe.  Close your command prompt after that.  The exe is in Server_Service/bin/release
 
 - Go to the start menu and search for "Services".  Open the Services application.  Find the service you just created, right click on it, and select "Properties".  Check in the "General" tab that the "Startup type" is set to "Automatic".  If it is not, change it to "Automatic". 
 
